@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AskGrace • AI Chatbot for SaaS</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  
+  <!-- 400 for body, 600/700 for headings & buttons -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+    rel="stylesheet">
+  
+  <!-- Core stylesheet -->
+  <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+
+  <!-- =======================================
+       HEADER  ( → genesis_header )
+  ======================================== -->
+  <header class="site-header container">
+    <a class="logo" href="#"><img src="assets/Logo.png" alt="AskGrace logo"></a>
+
+    <nav class="primary-nav" aria-label="Main">
+      <button class="nav-toggle" aria-expanded="false" aria-controls="nav-list">☰</button>
+      <ul id="nav-list">
+        <li><a href="#about">About</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+        <li><a href="#process">Process</a></li>
+      </ul>
+    </nav>
+
+    <a class="btn btn--primary" href="#cta">Get Started</a>
+  </header>
+
+  <main>
+
+    <!-- ===================================
+         HERO  ( → genesis_after_header )
+    ==================================== -->
+    <section class="hero container">
+      <h1 class="hero__title">Supercharge your support&nbsp;&amp;&nbsp;sales</h1>
+      <p class="hero__subtitle">with personalised AI powered chat?</p>
+
+      <figure class="hero__media">
+        <!-- Swap this img for <video> or <iframe> once ready -->
+        <img src="assets/VSL.png" alt="AskGrace demo">
+      </figure>
+
+      <a class="btn btn--primary" href="#demo">Instant Demo</a>
+    </section>
+
+    <!-- ===================================
+         TRUST LOGOS
+    ==================================== -->
+    <!--
+    <section class="brands">
+      <div class="container">
+        <p class="brands__intro">You’re in good hands:</p>
+        <ul class="brands__grid">
+          <li><img src="assets/saas-brand-logo.png" alt="SaaS Brand"></li>
+          <li><img src="assets/saas-x-logo.png" alt="SaaS X"></li>
+          <li><img src="assets/SAASi-logo.png" alt="SAASi"></li>
+          <li><img src="assets/Fansaastic-logo.png" alt="FanSaaStic"></li>
+        </ul>
+      </div>
+    </section>
+    -->
+
+    <section class="brands">
+      <div class="container">   <!-- just add this wrapper -->
+      <p class="brands__intro">You’re in good hands:</p>
+    
+      <div class="logo-marquee" aria-label="Trusted by">
+        <div class="marquee__track">
+          <!-- ① original set -->
+          <img src="assets/saas-brand-logo.png" alt="SaaS Brand">
+          <img src="assets/saas-x-logo.png" alt="SaaS X">
+          <img src="assets/SAASi-logo.png" alt="SAASi">
+          <img src="assets/Fansaastic-logo.png" alt="FanSaaStic">
+    
+          <!-- ② duplicate -->
+          <img src="assets/saas-brand-logo.png" alt="" aria-hidden="true">
+          <img src="assets/saas-x-logo.png" alt="" aria-hidden="true">
+          <img src="assets/SAASi-logo.png" alt="" aria-hidden="true">
+          <img src="assets/Fansaastic-logo.png" alt="" aria-hidden="true">
+    
+          <!-- ③ third pass — guarantees seamless loop -->
+          <img src="assets/saas-brand-logo.png" alt="" aria-hidden="true">
+          <img src="assets/saas-x-logo.png" alt="" aria-hidden="true">
+          <img src="assets/SAASi-logo.png" alt="" aria-hidden="true">
+          <img src="assets/Fansaastic-logo.png" alt="" aria-hidden="true">
+        </div>
+      </div>
+    </div>
+    </section>
+    
+    
+
+    <!-- ===================================
+         TESTIMONIAL CARDS
+    ==================================== -->
+    <section class="testimonials container">
+      <h2>Hear it directly from our clients</h2>
+      <p class="section-lead">See what impact Grace has on real teams.</p>
+
+      <div class="cards">
+        <!-- Card -->
+        <article class="card card--testimonial">
+          <figure class="card__media">
+            <img src="assets/testimonial-vid1.png" alt="Alex Kim">
+          </figure>
+          <div class="card__body">
+            <h3 class="card__brand">SaaS Brand</h3>
+            <p>“Grace now handles 86 % of our support tickets—our CSAT hasn’t been this high in years.”</p>
+            <footer class="card__meta">Alex Kim – CEO</footer>
+          </div>
+        </article>
+                <!-- Card -->
+        <article class="card card--testimonial">
+          <figure class="card__media">
+            <img src="assets/testimonial-vid2.png" alt="Alex Kim">
+          </figure>
+          <div class="card__body">
+            <h3 class="card__brand">SaaS Brand</h3>
+            <p>“Grace now handles 86 % of our support tickets—our CSAT hasn’t been this high in years.”</p>
+            <footer class="card__meta">Alex Kim – CEO</footer>
+          </div>
+        </article>
+        <!-- Card -->
+        <article class="card card--testimonial">
+          <figure class="card__media">
+            <img src="assets/testimonial-vid3.png" alt="Alex Kim">
+          </figure>
+          <div class="card__body">
+            <h3 class="card__brand">SaaS Brand</h3>
+            <p>“Grace now handles 86 % of our support tickets—our CSAT hasn’t been this high in years.”</p>
+            <footer class="card__meta">Alex Kim – CEO</footer>
+          </div>
+        </article>
+        <!-- Repeat 2 more cards… -->
+      </div>
+    </section>
+
+    <!-- ===================================
+         SPEED TO ROI
+    ==================================== -->
+    <section class="roi container">
+      <h2>At AskGrace, we focus on speed to ROI.</h2>
+      <p class="section-lead">Our AI chat agents learn your product, speak your brand voice, and turn every conversation into a growth opportunity.</p>
+      <a class="btn btn--primary" href="#book">Book a 15-min call</a>
+    </section>
+
+    <!-- ===================================
+         3 STEPS
+    ==================================== -->
+    <section class="steps container">
+      <h2>Launch Grace in 3 simple steps</h2>
+      <p class="section-lead">Connect your data, train the AI, and go live in minutes—<em>not months</em></p>
+
+      <ol class="steps__grid">
+        <li class="step">
+          <img src="assets/connect-icon.png" alt="" class="step__icon">
+          <h3>Connect</h3>
+          <p>Sync your help-desk, docs, and CRM with one click</p>
+        </li>
+        <li class="step">
+          <img src="assets/train-icon.png" alt="" class="step__icon">
+          <h3>Train</h3>
+          <p>Grace ingests articles, tickets &amp; sales scripts to find the perfect answer</p>
+        </li>
+        <li class="step">
+          <img src="assets/launch-icon.png" alt="" class="step__icon">
+          <h3>Launch</h3>
+          <p>Drop one line of code on your site and watch conversions soar</p>
+        </li>
+      </ol>
+    </section>
+
+    <!-- ===================================
+         HOW CAN I HELP? (SEARCH BOX DEMO)
+    ==================================== -->
+    <section class="ask container">
+      <h2>How can I help?</h2>
+      <p class="section-lead">Scale onboarding, support, and revenue 24/7 with AskGrace</p>
+
+      <form class="ask__form" role="search">
+        <input type="search" placeholder="Hi, I’m Grace. Ask me anything…" aria-label="Ask Grace anything">
+        <button type="submit" class="btn btn--ghost">↵</button>
+      </form>
+
+      <div class="ask__tags">
+        <label><input type="radio" name="mode" checked> Sales</label>
+        <label><input type="radio" name="mode"> Support</label>
+        <label><input type="radio" name="mode"> Both</label>
+      </div>
+
+      <a class="btn btn--primary" href="#cta">Get Started</a>
+    </section>
+
+    <!-- ===================================
+         FAQ ACCORDION
+    ==================================== -->
+    <section class="faq container">
+      <h2>More Questions?</h2>
+
+      <details class="faq__item">
+        <summary>How does AskGrace learn our product?</summary>
+        <p>Grace ingests your existing help-desk tickets, docs, release notes, and CRM data.</p>
+      </details>
+
+      <!-- Repeat other FAQs -->
+    </section>
+
+    <!-- ===================================
+         CTA BANNER
+    ==================================== -->
+    <section id="cta" class="cta glow-panel">
+      <div class="container">
+        <h2>Ready to scale your support &amp; sales to new heights?</h2>
+        <p>Seamlessly hand off every chat to Grace and watch conversions soar 24/7.</p>
+        <a class="btn btn--primary" href="#get-started">Get Started</a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =======================================
+       FOOTER  ( → genesis_footer )
+  ======================================== -->
+  <footer class="site-footer container">
+    <div class="site-brand">
+      <img src="assets/Logo.png" alt="AskGrace logo">
+      <p>Scale your support &amp; sales to new heights with AI powered sales and support 24/7</p>
+    </div>
+
+    <nav class="footer-nav" aria-label="Footer">
+      <h4>Pages</h4>
+      <ul>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">Services</a></li>
+        <li><a href="#">404</a></li>
+      </ul>
+    </nav>
+
+    <nav class="footer-nav">
+      <h4>Information</h4>
+      <ul>
+        <li><a href="#">Terms of Service</a></li>
+      </ul>
+    </nav>
+  </footer>
+
+</body>
+</html>

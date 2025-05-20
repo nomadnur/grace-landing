@@ -1,0 +1,623 @@
+/*
+ Theme Name:   AskGrace Child
+ Theme URI:    https://example.com/askgrace-child
+ Description:  Genesis child theme for AskGrace AI Chat homepage
+ Author:       Your Name
+ Author URI:   https://example.com
+ Template:     genesis
+ Version:      1.0.0
+ License:      GNU General Public License v2 or later
+ License URI:  https://www.gnu.org/licenses/gpl-2.0.html
+ Text Domain:  askgrace
+*/
+
+/* Your CSS variables and rules go here: */
+/* ===================================
+   0. Design Tokens
+=================================== */
+:root {
+  /* Font families */
+  --font-base: "Inter", Arial, sans-serif;
+
+  /* Type scale */
+  --fs-900: 3.5rem;  /* Display-XL */
+  --fs-800: 2.25rem; /* Display-L  */
+  --fs-700: 1.5rem;  /* Display-M  */
+  --fs-600: 1.25rem; /* Body-L     */
+  --fs-500: 1rem;    /* Body-M     */
+  --fs-400: 0.875rem;/* Body-S     */
+
+  /* Colours */
+  --colour-bg: #000;
+  --colour-surface: #111;
+  --colour-primary: #e000ff;
+  --colour-primary-hover: #c500e0;
+  --colour-text: #fff;
+  --colour-text-muted: #9ca3af;
+  --colour-border: #1f2937;
+
+  /* Spacing (4-point scale) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+
+  /* Misc */
+  --radius-sm: 4px;
+  --radius-lg: 8px;
+  --shadow-card: 0 4px 12px rgba(0,0,0,0.25);
+
+  --container-max: 1200px;
+
+  /* ✦ Gradient accent colours */
+--grad-a: #e000ff;   /* existing primary pink-magenta      */
+--grad-b: #00e0ff;   /* complementary cyan                 */
+--grad-c: #ff6b00;   /* warm orange for richer blends      */
+
+}
+
+/* ===================================
+   1. Global Reset / Base
+=================================== */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  background: var(--colour-bg);
+  color: var(--colour-text);
+  font-family: var(--font-base);
+  font-size: 100%; /* 16px */
+  line-height: 1.6;
+}
+
+body { margin: 0; }
+
+/* Typography shorthands */
+h1, h2, h3, h4, h5 { font-weight: 400; line-height: 1.2; margin: 0 0 var(--space-4);letter-spacing: -1px;}
+h1 { font-size: var(--fs-900); }
+h2 { font-size: var(--fs-800); }
+h3 { font-size: var(--fs-700); }
+
+p { margin: 0 0 var(--space-4); }
+.section-lead { font-size: var(--fs-600); color: var(--colour-text-muted); }
+
+/* Containers */
+.container {
+  max-width: var(--container-max);
+  padding-inline: var(--space-5);
+  margin-inline: auto;
+}
+
+/* Buttons */
+.btn {
+  display: inline-block;
+  padding: var(--space-2) var(--space-5);
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  font-weight: 600;
+  text-align: center;
+}
+
+.btn--primary {
+  background: var(--colour-primary);
+  color: #fff;
+  transition: background .2s ease;
+}
+
+.btn--primary:hover,
+.btn--primary:focus-visible { background: var(--colour-primary-hover); }
+
+.btn--ghost { background: transparent; color: var(--colour-text); border: 1px solid var(--colour-border); }
+
+/* ===================================
+   2. Header
+=================================== */
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-block: var(--space-4);
+}
+
+.primary-nav ul {
+  list-style: none;
+  display: flex;
+  gap: var(--space-5);
+  padding: 0;
+  margin: 0;
+}
+
+.nav-toggle { display: none; }
+
+/* Mobile menu trigger */
+@media (max-width: 768px) {
+  .primary-nav ul { display: none; }
+  .nav-toggle { display: inline-block; background: none; border: none; color: var(--colour-text); font-size: 1.5rem; }
+}
+
+/* ===============================
+   Header – Primary navigation
+================================ */
+.primary-nav a {
+  color: var(--colour-text);          /* white by default */
+  text-decoration: none;              /* remove underline */
+  font-weight: 600;                   /* same weight as Figma */
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  transition: color .15s ease, 
+              background .15s ease;
+}
+
+.primary-nav a:hover,
+.primary-nav a:focus-visible {
+  background: var(--colour-surface);  /* subtle pill on hover */
+  color: var(--colour-primary);       /* magenta text on hover */
+  outline: none;                      /* rely on the colour swap */
+}
+
+/* Optional: show current section when you add scroll-spy / WP menu classes */
+.primary-nav .current-menu-item > a,
+.primary-nav .current_page_item > a {
+  color: var(--colour-primary);
+}
+
+/* ===================================
+   3. Hero
+=================================== */
+.hero {
+  text-align: center;
+  padding-block: var(--space-8) var(--space-7);
+}
+
+.hero__subtitle { font-style: italic; margin-bottom: var(--space-6); }
+
+.hero__media {
+  max-width: 720px;
+  margin-inline: auto;
+  margin-bottom: var(--space-5);
+}
+
+.hero__media img,
+.hero__media video,
+.hero__media iframe {
+  width: 100%;
+  display: block;
+  border-radius: var(--radius-lg);
+}
+
+/* ===================================
+   Hero blurred gradient background
+=================================== */
+.hero::before {
+  content: "";
+  position: absolute;
+  /* centre it roughly under the video */
+  left: 50%; top: 55%;
+  width: 800px; height: 600px;
+  transform: translate(-50%, -50%);
+  background:
+      radial-gradient(450px 350px at 30% 30%, var(--grad-a) 0%, transparent 70%),
+      radial-gradient(450px 450px at 70% 70%, var(--grad-b) 0%, transparent 70%),
+      radial-gradient(600px 600px at 50% 40%, var(--grad-c) 0%, transparent 70%);
+  filter: blur(140px);
+  opacity: .55;
+  pointer-events: none;   /* preserve clicks on video */
+}
+
+/* ===================================
+   Hero – keep gradient *behind* video
+=================================== */
+.hero {
+  position: relative;          /* create a stacking context */
+  z-index: 0;                  /* baseline for children     */
+}
+
+.hero::before {
+  /* … your existing gradient / blur rules … */
+  z-index: -1;                 /* ⬅️  push behind content   */
+}
+
+/* Optional safety net: make sure the media sits above 0 */
+.hero__media {
+  position: relative;
+  z-index: 1;
+}
+
+
+
+/* ===================================
+   4. Brands (logo strip)
+=================================== */
+.brands {
+  padding-block: var(--space-7);
+  text-align: center;
+}
+
+.brands__grid {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: var(--space-5);
+  padding: 0;
+  margin: var(--space-5) 0 0;
+}
+
+.brands__grid img { filter: grayscale(1); opacity: .8; max-width: 100%; }
+
+/* ===================================
+   5. Testimonials
+=================================== */
+.cards {
+  display: flex;
+  gap: var(--space-6);
+  overflow-x: auto;
+  padding-bottom: var(--space-5);
+  scroll-snap-type: x mandatory;
+}
+
+.card {
+  background: var(--colour-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  flex: 0 0 320px;
+  scroll-snap-align: start;
+}
+
+.card__media img { width: 100%; border-radius: var(--radius-lg) var(--radius-lg) 0 0; }
+
+.card__body { padding: var(--space-5); }
+
+.card__brand { margin: 0 0 var(--space-3); }
+
+/* ===================================
+   Card halo (applies to all .card)
+=================================== */
+.card {
+  /* existing styles … */
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: "";
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg,
+                var(--grad-a) 0%,
+                transparent 30% 70%,
+                var(--grad-b) 100%);
+  opacity: .35;
+  mix-blend-mode: overlay;   /* keeps shadows intact */
+  pointer-events: none;
+}
+
+
+
+/* ===================================
+   6. ROI / CTA section
+=================================== */
+.roi {
+  text-align: center;
+  padding-block: var(--space-8);
+}
+
+/* ===================================
+   CTA banner gradient strip
+=================================== */
+.cta {
+  position: relative;
+  overflow: hidden;   /* keep pseudo element inside */
+}
+
+.cta::before {
+  content: "";
+  position: absolute; inset: -40% 0 auto;   /* push up & span full width */
+  height: 120%;
+  background: linear-gradient(120deg, var(--grad-b), var(--grad-a), var(--grad-c));
+  filter: blur(120px);
+  opacity: .45;
+  transform: translateY(-30%);
+  pointer-events: none;
+}
+
+
+/* ===================================
+   7. Steps
+=================================== */
+.steps__grid {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-6);
+  padding: 0;
+  margin: var(--space-6) 0 0;
+}
+
+@media (max-width: 768px) {
+  .steps__grid { grid-template-columns: 1fr; }
+}
+
+.step { text-align: center; padding: var(--space-5); }
+
+.step__icon { width: 48px; height: 48px; margin-bottom: var(--space-4); }
+
+/* ===================================
+   8. Ask (search demo)
+=================================== */
+.ask {
+  text-align: center;
+  padding-block: var(--space-8);
+}
+
+.ask__form {
+  display: flex;
+  max-width: 480px;
+  margin-inline: auto;
+  background: var(--colour-surface);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  margin-bottom: var(--space-4);
+}
+
+.ask__form input {
+  flex: 1;
+  padding: var(--space-3) var(--space-4);
+  background: transparent;
+  border: none;
+  color: var(--colour-text);
+}
+
+.ask__form button {
+  background: none;
+  border: none;
+  color: var(--colour-text-muted);
+  padding-inline: var(--space-4);
+}
+
+.ask__tags {
+  display: flex;
+  gap: var(--space-3);
+  justify-content: center;
+  margin-bottom: var(--space-5);
+}
+
+.ask__tags input { accent-color: var(--colour-primary); }
+
+/* ===================================
+   9. FAQ
+=================================== */
+.faq {
+  padding-block: var(--space-8);
+}
+
+.faq__item {
+  border: 1px solid var(--colour-border);
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--space-4);
+  padding: var(--space-4) var(--space-5);
+}
+
+.faq__item summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+/* ===================================
+   10. CTA Banner
+=================================== */
+.cta {
+  background: var(--colour-surface);
+  text-align: center;
+  padding-block: var(--space-8);
+}
+
+/* ===================================
+   11. Footer
+=================================== */
+.site-footer {
+  display: grid;
+  gap: var(--space-6);
+  grid-template-columns: 2fr 1fr 1fr;
+  padding-block: var(--space-8);
+  border-top: 1px solid var(--colour-border);
+}
+
+@media (max-width: 768px) {
+  .site-footer { grid-template-columns: 1fr; text-align: center; }
+  .footer-nav h4 { margin-top: var(--space-5); }
+}
+
+.footer-nav ul { list-style: none; padding: 0; margin: 0; }
+
+.footer-nav a { text-decoration: none; color: var(--colour-text-muted); }
+.footer-nav a:hover { color: var(--colour-text); }
+
+/* =====================================================
+   HERO — blurred gradient + slow drift animation
+===================================================== */
+
+/* 0 ▸ make <section class="hero"> a stacking context  */
+.hero { position: relative; }
+
+/* 1 ▸ static glow layer (z-index stays default 0)     */
+.hero::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 55%;
+  width: 800px;
+  height: 600px;
+
+  /*  ✦  IMPORTANT:  this “from” position == keyframe start  */
+  transform: translate(-50%, -55%);
+
+  background:
+    radial-gradient(450px 350px at 30% 30%, var(--grad-a) 0%, transparent 70%),
+    radial-gradient(450px 450px at 70% 70%, var(--grad-b) 0%, transparent 70%),
+    radial-gradient(600px 600px at 50% 40%, var(--grad-c) 0%, transparent 70%);
+  filter: blur(140px);
+  opacity: .55;
+  pointer-events: none;
+}
+
+/* =====================================================
+   HERO • final subtle gradient drift
+   (keeps accessibility-friendly motion guard)
+===================================================== */
+
+.hero { position: relative; }           /* already present */
+
+/* Static glow layer */
+.hero::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 55%;
+  width: 800px;
+  height: 600px;
+
+  /* Match the keyframe start so there’s no first-frame jump */
+  transform: translate(-50%, -55%);
+
+  background:
+    radial-gradient(450px 350px at 30% 30%, var(--grad-a) 0%, transparent 70%),
+    radial-gradient(450px 450px at 70% 70%, var(--grad-b) 0%, transparent 70%),
+    radial-gradient(600px 600px at 50% 40%, var(--grad-c) 0%, transparent 70%);
+  filter: blur(140px);       /* back to soft haze */
+  opacity: .55;              /* back to gentle contrast */
+  pointer-events: none;
+}
+
+/* Run only if the user hasn’t disabled motion */
+@media (prefers-reduced-motion: no-preference) {
+
+  /* Tiny drift + slight rotation */
+  @keyframes blobmove {
+    from { transform: translate(-50%, -55%) rotate(0deg); }
+    to   { transform: translate(-48%, -50%) rotate(2deg); }
+  }
+
+  .hero::before {
+    animation: blobmove 35s linear infinite alternate;
+  }
+}
+
+/* =========================================================
+   TRUST LOGOS • Infinite scroll → RIGHT (no blank gap)
+========================================================= */
+
+.logo-marquee {
+  overflow: hidden;
+  max-width: var(--container-max);   /* aligns with other sections */
+  margin-inline: auto;
+  padding-inline: var(--space-5);
+
+  /* optional edge fade */
+  mask-image: linear-gradient(to right,
+                transparent 0%, #000 7%, #000 93%, transparent 100%);
+}
+
+/* ---- sliding track ---- */
+.marquee__track {
+  display: inline-flex;
+  gap: var(--space-8);         /* ≈64 px space between logos */
+  align-items: center;
+
+  /* Start one-third left, then glide to 0  →  keeps view filled */
+  transform: translateX(-33.333%);
+  animation: scrollRightLoop 38s linear infinite;
+}
+
+/* full-colour logos */
+.marquee__track img {
+  max-height: 52px;
+  flex: 0 0 auto;
+}
+
+/* keyframes:  -33.333 %  →  0 %  (track moves right) */
+@keyframes scrollRightLoop {
+  from { transform: translateX(-33.333%); }
+  to   { transform: translateX(0%); }
+}
+
+/* Pause motion for users requesting reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .marquee__track { animation: none; transform: translateX(0); }
+}
+
+/* =====================================================
+   CTA  •  Framer-style panel + animated glow
+   -----------------------------------------------------
+   Requires you already have --grad-a/b/c tokens
+   and the @keyframes blobmove defined earlier.
+===================================================== */
+
+/* 0. Panel container ------------------------------------------------ */
+.glow-panel {
+  position: relative;                 /* stacking context */
+  margin-inline: auto;
+  max-width: 1000px;                  /* feels like the ref site */
+  padding: var(--space-8) var(--space-7);
+  background: rgba(255,255,255,0.04); /* faint inner panel */
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 24px;
+  text-align: center;
+  overflow: hidden;                   /* hide the glow edges */
+}
+
+/* 1. Glow layer ----------------------------------------------------- */
+.glow-panel::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -30%;                       /* anchor lower half */
+  width: 120%;
+  height: 160%;
+  transform: translateX(-50%) translateY(0);
+  background:
+    radial-gradient(600px 400px at 50% 70%, var(--grad-c) 0%, transparent 70%),
+    radial-gradient(600px 400px at 30% 60%, var(--grad-a) 0%, transparent 70%),
+    radial-gradient(600px 400px at 70% 75%, var(--grad-b) 0%, transparent 70%);
+  filter: blur(120px);
+  opacity: 0.75;
+  pointer-events: none;
+}
+
+/* 2. Run the same drift animation when motion is allowed ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  .glow-panel::before {
+    animation: blobmove 28s linear infinite alternate-reverse;
+  }
+}
+
+/* 3. Typography & button tweaks ----------------------------------- */
+.glow-panel h2 {
+  font-size: clamp(2rem, 4vw + 1rem, 3.5rem); /* fluid headline */
+  font-weight: 600;
+  line-height: 1.2;
+  margin-bottom: var(--space-5);
+}
+.glow-panel p {
+  font-size: var(--fs-600);
+  color: var(--colour-text-muted);
+  max-width: 60ch;
+  margin-inline: auto;
+  margin-bottom: var(--space-6);
+}
+.glow-panel .btn--primary {            /* bigger call-to-action */
+  font-size: 1rem;
+  padding: var(--space-3) var(--space-6);
+  border-radius: 8px;
+}
+
+/* 4. Optional: add a subtle inner shadow like the inspiration site */
+.glow-panel {
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.06),
+    0 2px 6px rgba(0,0,0,0.45);
+}
