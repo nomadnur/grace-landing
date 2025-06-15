@@ -257,6 +257,14 @@ header.site-header .nav-toggle {
   header.site-header .site-nav .header-cta {
     display: none;
   }
+
+  /* 2.7f. Stack menu links vertically and fill mobile width */
+  header.site-header .site-nav .header-menu {
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 100%;
+    margin: 0;
+  }
 }
 
 /* — 2.8. Burger icon styling (three bars → X when open) — */
