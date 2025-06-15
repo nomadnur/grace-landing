@@ -1,9 +1,9 @@
 /*
  Theme Name:   AskGrace Child
- Theme URI:    https://example.com/askgrace-child
+ Theme URI:    https://askgrace.io
  Description:  Genesis child theme for AskGrace AI Chat homepage
- Author:       Your Name
- Author URI:   https://example.com
+ Author:       Nur Ahmad Furlong
+ Author URI:   https://www.nurahmadfurlong.com
  Template:     genesis
  Version:      1.0.0
  License:      GNU General Public License v2 or later
@@ -30,8 +30,8 @@
   /* Colours */
   --colour-bg: #000;
   --colour-surface: #111;
-  --colour-primary: #e000ff;
-  --colour-primary-hover: #c500e0;
+  --colour-primary: #0270ED;
+  --colour-primary-hover: #0270ED;
   --colour-text: #fff;
   --colour-text-muted: #9ca3af;
   --colour-border: #1f2937;
@@ -54,7 +54,7 @@
   --container-max: 1200px;
 
   /* ✦ Gradient accent colours */
---grad-a: #e000ff;   /* existing primary pink-magenta      */
+--grad-a: #0270ED;   /* existing primary pink-magenta      */
 --grad-b: #00e0ff;   /* complementary cyan                 */
 --grad-c: #ff6b00;   /* warm orange for richer blends      */
 
@@ -88,7 +88,8 @@ p { margin: 0 0 var(--space-4); }
 .section-lead { font-size: var(--fs-600); color: var(--colour-text-muted); }
 
 /* Containers */
-.container {
+.container,
+.site-header {
   max-width: var(--container-max);
   padding-inline: var(--space-5);
   margin-inline: auto;
@@ -115,64 +116,194 @@ p { margin: 0 0 var(--space-4); }
 
 .btn--ghost { background: transparent; color: var(--colour-text); border: 1px solid var(--colour-border); }
 
-/* ===================================
-   2. Header
-=================================== */
-.site-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-block: var(--space-4);
+/* ===========================================================================
+   2. Header (complete block: logo | menu links evenly spaced | button)
+   =========================================================================== */
+
+/* — 2.1. Outer header: override Genesis’s default flex — */
+header.site-header {
+  display: block !important;               /* disable Genesis’s native flex */
+  background: transparent;                 /* keep your gradient/background */
+  padding-block: var(--space-4);           /* vertical padding above/below header */
 }
 
-.primary-nav ul {
-  list-style: none;
+/* — 2.2. Center + constrain the “header-inner” exactly like your other sections — */
+header.site-header .container.header-inner {
   display: flex;
-  gap: var(--space-5);
+  align-items: center;
+  gap: var(--space-4);                     /* small gap between logo/nav/button */
+
+  /* match your global container width/gutters: */
+  max-width: var(--container-max);         /* e.g. 72rem */
+  margin-inline: auto;                     /* center it in the viewport */
+  padding-inline: var(--space-5);          /* same left/right gutter as other sections */
+  position: relative;                      /* for mobile dropdown positioning */
+}
+
+/* — 2.3. Logo / site-branding: always flush‐left and never grows — */
+header.site-header .site-branding {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+/* — 2.4. Navigation container: expands to fill space between logo and button — */
+header.site-header .site-nav {
+  flex: 1 1 auto;                          /* grow/shrink to fill available space */
+  display: flex;
+  align-items: center;
+  margin-inline: var(--space-4);           /* breathing room from logo & button */
+}
+
+/* — 2.4a. Inside <nav>, target the UL wrapper and force it to fill 100% — */
+header.site-header .site-nav .menu-header-menu-container {
+  flex: 1 1 auto;                          /* let this wrapper fill the nav area */
+}
+
+/* — 2.4b. The <ul> of menu links: spread items evenly across its 100% width — */
+header.site-header .site-nav .header-menu {
+  display: flex;
+  width: 60%;
+  justify-content: space-between;          /* even spacing between each <li> */
+  list-style: none;
+  margin: 0 20%; /* center the menu in the nav area */
   padding: 0;
+}
+
+/* — 2.4c. Remove any stray left/right margins on <li> (since space-between handles it) — */
+header.site-header .site-nav .header-menu li {
   margin: 0;
 }
 
-.nav-toggle { display: none; }
-
-/* Mobile menu trigger */
-@media (max-width: 768px) {
-  .primary-nav ul { display: none; }
-  .nav-toggle { display: inline-block; background: none; border: none; color: var(--colour-text); font-size: 1.5rem; }
+/* — 2.4d. Style each link (you can tweak colors to match your design) — */
+header.site-header .site-nav .header-menu a {
+  display: block;
+  color: var(--colour-text);
+  text-decoration: none;
+  font-weight: 600;
+  padding-block: var(--space-2);           /* vertical hit area */
+  padding-inline: var(--space-4);          /* horizontal padding for touch comfort */
+  transition: background .15s ease, color .15s ease;
 }
-
-/* ===============================
-   Header – Primary navigation
-================================ */
-.primary-nav a {
-  color: var(--colour-text);          /* white by default */
-  text-decoration: none;              /* remove underline */
-  font-weight: 600;                   /* same weight as Figma */
-  padding: var(--space-2) var(--space-3);
-  border-radius: var(--radius-sm);
-  transition: color .15s ease, 
-              background .15s ease;
-}
-
-.primary-nav a:hover,
-.primary-nav a:focus-visible {
-  background: var(--colour-surface);  /* subtle pill on hover */
-  color: var(--colour-primary);       /* magenta text on hover */
-  outline: none;                      /* rely on the colour swap */
-}
-
-/* Optional: show current section when you add scroll-spy / WP menu classes */
-.primary-nav .current-menu-item > a,
-.primary-nav .current_page_item > a {
+header.site-header .site-nav .header-menu a:hover,
+header.site-header .site-nav .header-menu a:focus {
+  background: var(--colour-surface);
   color: var(--colour-primary);
+  outline: none;
 }
+
+/* — 2.5. “Get Started” button: always flush‐right and never grows — */
+header.site-header .site-nav .header-cta {
+  flex: 0 0 auto;
+  white-space: nowrap;                     /* prevent button text from wrapping */
+  margin-left: var(--space-4);             /* small gap from the last menu link */
+}
+
+/* — 2.6. Burger toggle: hidden on desktop, shown on mobile — */
+header.site-header .nav-toggle {
+  display: none;
+}
+
+/* — 2.7. Mobile (≤ 960px): convert header-inner to a 2×2 grid — */
+@media (max-width: 960px) {
+  /* 2.7a. Make the header-inner a two-row grid:
+        row 1: site-branding (logo) on left + nav-toggle (burger) on right
+        row 2: site-nav (including links + CTA) spans both columns, hidden by default */
+  header.site-header .container.header-inner {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto;
+    gap: var(--space-3) var(--space-5);
+    position: relative;                    /* for absolute positioning if needed */
+  }
+
+  /* 2.7b. Logo in top-left */
+  header.site-header .site-branding {
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
+  }
+
+  /* 2.7c. Show the burger in top-right */
+  header.site-header .nav-toggle {
+    display: block;
+    grid-column: 2 / 3;
+    grid-row: 1 / 2;
+    background: none;
+    border: none;
+    cursor: pointer;
+    width: 2rem;
+    aspect-ratio: 1 / 0.75;
+    padding: 0;
+    position: relative;
+  }
+
+  /* 2.7d. Move the nav (UL+CTA) into row 2, spanning both columns, hidden initially */
+  header.site-header .site-nav {
+    grid-column: 1 / -1;
+    grid-row: 2 / 3;
+    display: none;                          /* show only when “.open” class is added */
+    flex-direction: column;                 /* stack links + CTA vertically */
+    gap: var(--space-4);
+    background: var(--colour-surface);
+    padding: var(--space-5);
+    margin-top: var(--space-3);
+  }
+  header.site-header .site-nav.open {
+    display: flex;
+  }
+
+  /* 2.7e. Hide the desktop “Get Started” button on mobile (optional) */
+  header.site-header .site-nav .header-cta {
+    display: none;
+  }
+}
+
+/* — 2.8. Burger icon styling (three bars → X when open) — */
+header.site-header .nav-toggle__bar,
+header.site-header .nav-toggle__bar::before,
+header.site-header .nav-toggle__bar::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--colour-text);
+  transition: transform .25s ease, background .25s ease;
+}
+header.site-header .nav-toggle__bar {
+  top: 50%;
+  transform: translateY(-50%);
+}
+header.site-header .nav-toggle__bar::before {
+  top: -6px;
+}
+header.site-header .nav-toggle__bar::after {
+  top: 6px;
+}
+header.site-header .nav-toggle.open .nav-toggle__bar {
+  background: transparent;
+}
+header.site-header .nav-toggle.open .nav-toggle__bar::before {
+  transform: translateY(6px) rotate(45deg);
+}
+header.site-header .nav-toggle.open .nav-toggle__bar::after {
+  transform: translateY(-6px) rotate(-45deg);
+}
+
+
+
+
 
 /* ===================================
    3. Hero
 =================================== */
 .hero {
   text-align: center;
-  padding-block: var(--space-8) var(--space-7);
+  padding-block: var(--space-8) var(--space-1);
+  position: relative;   /* you already had this */
+  overflow: visible;    /* allow the blurred area to show */
+  z-index: 0;           /* baseline layer */
 }
 
 .hero__subtitle { font-style: italic; margin-bottom: var(--space-6); }
@@ -191,10 +322,15 @@ p { margin: 0 0 var(--space-4); }
   border-radius: var(--radius-lg);
 }
 
+.card--testimonial .hero__media 
+{
+  margin-top: 0;
+}
+
 /* ===================================
    Hero blurred gradient background
 =================================== */
-.hero::before {
+.hero.glow::before {
   content: "";
   position: absolute;
   /* centre it roughly under the video */
@@ -206,6 +342,7 @@ p { margin: 0 0 var(--space-4); }
       radial-gradient(450px 450px at 70% 70%, var(--grad-b) 0%, transparent 70%),
       radial-gradient(600px 600px at 50% 40%, var(--grad-c) 0%, transparent 70%);
   filter: blur(140px);
+  z-index: -1;          /* pushes it under the video & text */
   opacity: .55;
   pointer-events: none;   /* preserve clicks on video */
 }
@@ -213,20 +350,13 @@ p { margin: 0 0 var(--space-4); }
 /* ===================================
    Hero – keep gradient *behind* video
 =================================== */
-.hero {
-  position: relative;          /* create a stacking context */
-  z-index: 0;                  /* baseline for children     */
-}
 
-.hero::before {
-  /* … your existing gradient / blur rules … */
-  z-index: -1;                 /* ⬅️  push behind content   */
-}
 
 /* Optional safety net: make sure the media sits above 0 */
 .hero__media {
-  position: relative;
-  z-index: 1;
+  position: relative;   /* stacking context for video */
+  z-index: 1;           /* sits above the glow */
+  overflow: visible;    /* let the glow wrap under if it overlaps */
 }
 
 
@@ -275,6 +405,10 @@ p { margin: 0 0 var(--space-4); }
 
 .card__brand { margin: 0 0 var(--space-3); }
 
+.card__brand img {
+  height: 41px; /* smaller brand logo */
+}
+
 /* ===================================
    Card halo (applies to all .card)
 =================================== */
@@ -296,6 +430,121 @@ p { margin: 0 0 var(--space-4); }
   pointer-events: none;
 }
 
+/* ================================
+   Testimonials • Responsive Grid
+================================= */
+.testimonials .cards {
+  display: grid;
+  gap: var(--space-6);               /* consistent 24px gap */
+  /* 3 columns on wide screens */
+  grid-template-columns: repeat(3, 1fr);
+  margin: var(--space-6) 0;           /* vertical breathing room */
+  overflow: visible;                  /* disable the old overflow-x */
+  padding: 0;                         /* if you had padding-inline, remove it here */
+}
+
+/* Tablet: 2 columns */
+@media (max-width: 1024px) {
+  .testimonials .cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .testimonials .cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Make the 3rd card span both columns */
+  .testimonials .cards > .card:nth-child(3) {
+    grid-column: 1 / -1;
+  }
+}
+
+/* Mobile: 1 column */
+@media (max-width: 600px) {
+  .testimonials .cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Make sure each card fills its cell */
+.testimonials .card {
+  width: 100%;
+  margin: 0; /* reset any per-card margins */
+}
+
+/* ======================================
+   Testimonials • Heading & Intro Styling
+====================================== */
+.testimonials,
+.steps {
+  padding-block: var(--space-8) var(--space-6);
+}
+
+.testimonials > h2,
+.steps > h2 {
+  text-align: center;
+  margin: 0 0 var(--space-3);
+}
+
+.testimonials .section-lead,
+.steps .section-lead {
+  font-size: var(--fs-600);           /* Body-L */
+  color: var(--colour-text-muted);
+  text-align: center;
+  max-width: 60ch;
+  margin: 0 auto var(--space-6);
+}
+
+.testimonials p,
+.testimonials .card__meta{
+  color: var(--colour-text-muted);
+}
+
+/* Re-apply the responsive grid you set earlier */
+.testimonials .cards {
+  display: grid;
+  gap: var(--space-6);
+  grid-template-columns: repeat(3, 1fr);
+  margin: 0;  
+}
+
+/* Tablet: 2 columns */
+@media (max-width: 1024px) {
+  .testimonials .cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Mobile: 1 column */
+@media (max-width: 600px) {
+  .testimonials .cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Card reset so they fill their grid cell */
+.testimonials .card {
+  width: 100%;
+  margin: 0;
+}
+
+.testimonials figure {
+  margin: 0;
+}
+
+.testimonials .video-wrapper {
+  border-radius: 1rem 1rem 0rem 0rem;
+}
+
+.brand-logo { max-height: 40px; width: auto; margin: 0 auto .5rem; }
+
+
+/* Size the tiny brand logo inside testimonial cards */
+.card__brand img.brand-logo {
+  max-width: 120px;          /* feel free to tweak */
+  height: auto;
+  margin: 0 auto 0.5rem;     /* center + breathing room */
+  display: block;
+}
 
 
 /* ===================================
@@ -383,10 +632,324 @@ p { margin: 0 0 var(--space-4); }
   display: flex;
   gap: var(--space-3);
   justify-content: center;
-  margin-bottom: var(--space-5);
 }
 
 .ask__tags input { accent-color: var(--colour-primary); }
+
+/* ===================================================
+   ASK • “How can I help?” section styling per Figma
+=================================================== */
+.ask {
+  padding-block: var(--space-8) var(--space-6);
+  text-align: center;
+}
+
+/* Section heading */
+.ask > h2 {
+  margin: 0 0 var(--space-4);
+}
+
+/* Two-line subhead */
+.ask .section-lead {
+  font-size: var(--fs-600);      /* Body-L */
+  color: var(--colour-text-muted);
+  max-width: 48ch;
+  margin: 0 auto var(--space-6);
+  line-height: 1.5;
+}
+
+/* Chat form wrapper */
+.ask__form {
+  display: flex;
+  align-items: center;
+  max-width: 680px;
+  margin: 0 auto var(--space-4);
+  background: var(--colour-surface);
+  border-radius: var(--radius-lg);
+  padding: var(--space-3) var(--space-4);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+/* Input field */
+.ask__form input[type="search"] {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--colour-text);
+  font-size: var(--fs-500);
+  line-height: 1.4;
+  padding: var(--space-2) 0;
+}
+.ask__form input::placeholder {
+  color: var(--colour-text-muted);
+}
+
+/* Send button (paper plane) */
+.ask__form button {
+  background: transparent;
+  border: none;
+  color: var(--colour-text-muted);
+  font-size: 1.25rem;
+  cursor: pointer;
+}
+.ask__form button:hover,
+.ask__form button:focus {
+  color: var(--colour-text);
+}
+
+/* Mode toggles */
+.ask__tags {
+  display: inline-flex;
+  gap: var(--space-3);
+}
+.ask__tags label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  background: var(--colour-bg);
+  border: 1px solid var(--colour-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--fs-400);
+  color: var(--colour-text-muted);
+  cursor: pointer;
+  transition: background .2s, color .2s, border-color .2s;
+}
+.ask__tags input {
+  display: none;
+}
+.ask__tags input:checked + span,
+.ask__tags input:checked + .tag-icon,
+.ask__tags input:checked + span + .tag-icon {
+  background: var(--colour-primary);
+  color: #fff;
+  border-color: var(--colour-primary);
+}
+
+/* 1. Match H2 size */
+.ask > h2 {
+  text-align: center;
+  margin: 0 0 var(--space-4);
+}
+
+/* 2. Chat box layout tweaks */
+.ask__form {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);          /* space between elements */
+  max-width: 680px;
+  margin: 0 auto var(--space-6);
+  background: var(--colour-surface);
+  border-radius: var(--radius-lg);
+  padding: var(--space-3) var(--space-4);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+}
+
+/* let the input grow, keep toggles & button at natural size */
+.ask__form input[type="search"] {
+  flex: 1 1 auto;
+  margin-right: var(--space-3);
+}
+
+/* 3. Pills now live inside the form */
+.ask__tags {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.ask__tags label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  background: var(--colour-bg);
+  border: 1px solid var(--colour-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--fs-400);
+  color: var(--colour-text-muted);
+  cursor: pointer;
+  transition: background .2s, border-color .2s, color .2s;
+}
+
+.ask__tags input {
+  display: none;
+}
+
+/* icon inside the pill */
+.ask__tags .tag-icon {
+  width: 1em;
+  height: 1em;
+  fill: var(--colour-text-muted);
+  transition: fill .2s;
+}
+
+.ask__tags input:checked + .tag-icon,
+.ask__tags input:checked + .tag-icon + span,
+.ask__tags input:checked + span + .tag-icon {
+  background: var(--colour-primary);
+  border-color: var(--colour-primary);
+  color: #fff;
+}
+
+.ask__tags input:checked + .tag-icon {
+  fill: #fff;
+}
+
+/* 4. Shrink the button margin now the tags moved */
+.ask__form button {
+  border: 1px solid var(--colour-border);
+  border-radius: 100%;
+  width:40px;
+  height: 40px;
+}
+
+/* ─── Ask Section: vertical form layout ─────────────────── */
+.ask__form {
+  display: flex;
+  flex-direction: column;     /* stack input-row over toggles */
+  align-items: stretch;
+  max-width: 680px;
+  margin: 0 auto var(--space-6);
+  background: var(--colour-surface);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+}
+
+/*  Input + send icon side-by-side */
+.ask__input-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+/* full-width input */
+.ask__input-row input[type="search"] {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--colour-text);
+  font-size: var(--fs-500);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+}
+
+/*  Toggles below the input row */
+.ask__tags {
+  display: flex;
+  justify-content: start;     /* or center if you prefer */
+  gap: var(--space-3);
+  align-items: center;
+  width: 100%;           /* ← ensure it fills the parent */
+
+}
+
+/* pill-style labels (unchanged) */
+.ask__tags label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  background: var(--colour-bg);
+  border: 1px solid var(--colour-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--fs-400);
+  color: var(--colour-text-muted);
+  cursor: pointer;
+}
+.ask__tags input { display: none; }
+
+/* checked state */
+.ask__tags input:checked + span {
+  background: var(--colour-primary);
+  color: #fff;
+  border-color: var(--colour-primary);
+}
+
+/* Style the send button like the other pills */
+.ask__tags .tag-button {
+  background: var(--colour-bg);
+  border: 1px solid var(--colour-border);
+  border-radius: 100%;
+  padding: var(--space-2) var(--space-3);
+  /*display: flex;*/
+  align-items: center;
+  cursor: pointer;
+  transition: background .2s, border-color .2s, color .2s;
+  color: var(--colour-text-muted);
+  font-size: var(--fs-400);
+  margin-left: auto;              /* ← pushes this item to the end */
+  display: inline-flex;           /* use flex on the button itself */
+  align-items: center;            /* vertical centering */
+  justify-content: center;        /* horizontal centering */
+  width: var(--space-7);          /* make a square pill */
+  height: var(--space-7);
+  padding: 0;                     /* reset padding so width/height apply */
+}
+
+/* Make the SVG inside scale like the text */
+.ask__tags .tag-button svg {
+  width: 1em;
+  height: 1em;
+  fill: var(--colour-text-muted);
+  margin: 0;
+}
+
+/* Hover/active state */
+.ask__tags .tag-button:hover,
+.ask__tags .tag-button:focus {
+  background: var(--colour-primary);
+  border-color: var(--colour-primary);
+  color: #fff;
+}
+.ask__tags .tag-button:hover svg,
+.ask__tags .tag-button:focus svg {
+  fill: #fff;
+}
+
+/* ─────────────────────────────────────────────
+   Ask • toggle-pill hover & active states
+───────────────────────────────────────────── */
+
+/* 1) On hover or keyboard focus, all pills light up */
+.ask__tags label:hover,
+.ask__tags label:focus-within {
+  background: var(--colour-primary);
+  border-color: var(--colour-primary);
+  color: #fff;
+}
+.ask__tags label:hover svg,
+.ask__tags label:focus-within svg {
+  fill: #fff;
+}
+
+/* 2) When a radio is checked, its parent label stays “active” */
+@supports(selector(:has(*))) {
+  .ask__tags label:has(input:checked) {
+    background: var(--colour-primary);
+    border-color: var(--colour-primary);
+    color: #fff;
+  }
+  .ask__tags label:has(input:checked) svg {
+    fill: #fff;
+  }
+}
+
+/* 3) Keep the send-button matching the same pill hover style */
+.ask__tags .tag-button:hover,
+.ask__tags .tag-button:focus {
+  background: var(--colour-primary);
+  border-color: var(--colour-primary);
+  color: #fff;
+}
+.ask__tags .tag-button:hover svg,
+.ask__tags .tag-button:focus svg {
+  fill: #fff;
+}
+
+
+
 
 /* ===================================
    9. FAQ
@@ -395,16 +958,23 @@ p { margin: 0 0 var(--space-4); }
   padding-block: var(--space-8);
 }
 
+/*
 .faq__item {
   border: 1px solid var(--colour-border);
   border-radius: var(--radius-sm);
   margin-bottom: var(--space-4);
   padding: var(--space-4) var(--space-5);
-}
+  --colour-border: #1f2937;
+}*/
 
 .faq__item summary {
   cursor: pointer;
   font-weight: 600;
+}
+
+.faq > h2 {
+    text-align: center;
+    margin: 0 0 var(--space-4);
 }
 
 /* ===================================
@@ -419,18 +989,6 @@ p { margin: 0 0 var(--space-4); }
 /* ===================================
    11. Footer
 =================================== */
-.site-footer {
-  display: grid;
-  gap: var(--space-6);
-  grid-template-columns: 2fr 1fr 1fr;
-  padding-block: var(--space-8);
-  border-top: 1px solid var(--colour-border);
-}
-
-@media (max-width: 768px) {
-  .site-footer { grid-template-columns: 1fr; text-align: center; }
-  .footer-nav h4 { margin-top: var(--space-5); }
-}
 
 .footer-nav ul { list-style: none; padding: 0; margin: 0; }
 
@@ -561,7 +1119,6 @@ p { margin: 0 0 var(--space-4); }
 .glow-panel {
   position: relative;                 /* stacking context */
   margin-inline: auto;
-  max-width: 1000px;                  /* feels like the ref site */
   padding: var(--space-8) var(--space-7);
   background: rgba(255,255,255,0.04); /* faint inner panel */
   border: 1px solid rgba(255,255,255,0.07);
@@ -620,4 +1177,310 @@ p { margin: 0 0 var(--space-4); }
   box-shadow:
     inset 0 0 0 1px rgba(255,255,255,0.06),
     0 2px 6px rgba(0,0,0,0.45);
+}
+
+/* =====================================================
+   Video Cover  •  
+   -----------------------------------------------------
+   uses video.js to swap the poster image with the video iframe
+   when the play button is clicked.
+   Requires a video.js setup in your HTML.
+   The poster image should be set as the background of the .video-poster element.
+===================================================== */
+
+/* Add to style.css */
+.video-wrapper {
+  width: 100%;
+  overflow: hidden;
+  border-radius: 1rem; /* optional: rounded corners */
+  background: #000;
+  position: relative;         /* create stacking context */
+  aspect-ratio: 16 / 9;       /* modern, CSS-native ratio */
+}
+
+
+.video-wrapper iframe {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.video-poster,
+.video-iframe {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.video-poster img {
+  display: block;
+  object-fit: cover;
+  width: 100%; height: 100%;
+}
+
+.video-poster__play {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--colour-primary);
+  border: none;
+  border-radius: 50%;
+  width: 64px; height: 64px;
+  cursor: pointer;
+  z-index: 2;
+}
+.video-poster__play::before {
+  content: '';
+  position: absolute; inset: 0;
+  margin: auto;
+  width: 0; height: 0;
+  border-left: 22px solid #fff;
+  border-top: 14px solid transparent;
+  border-bottom: 14px solid transparent;
+}
+
+/* 1. Remove bullet from single page lists used as nav placeholders */
+.page .entry-content > ul {
+  list-style: none;
+  margin-left: 0;
+}
+
+/* 2. Brand-coloured links instead of browser-purple */
+a { color: var(--colour-primary); }                /* teal example */
+a:hover, a:focus { color: var(--colour-primary-hover); } /* darker teal */
+
+/* ===== FAQ ====================================================== */
+.faq              { margin-top: 5rem; }
+.faq__list        { list-style: none; margin: 0; padding: 0; display: grid; gap: 1rem; }
+
+/* Question row --------------------------------------------------- */
+.faq__question {
+    display: flex;               /* text + plus icon on one line            */
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 1rem 1.25rem;
+    background: #111;            /* same dark panel as other sections       */
+    border: 1px solid #333;
+    border-radius: .75rem;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background .2s, border-color .2s;
+}
+.faq__question:hover,
+.faq__question:focus-visible {
+    background: #171717;
+    border-color: #555;
+    outline: none;
+}
+
+/* Icon ----------------------------------------------------------- */
+.faq__icon {
+    margin-left: 1rem;
+    font-size: 1.25rem;
+    line-height: 1;
+    transition: transform .25s;
+}
+.faq__question[aria-expanded="true"] .faq__icon {
+    transform: rotate(45deg);    /* +  →  × */
+}
+
+/* Answer panel --------------------------------------------------- */
+.faq__answer {
+    border-top: none;
+    border-radius: 0 0 .75rem .75rem;
+    padding: 1rem 1.25rem;
+    color: #ddd;
+    font-size: .95rem;
+}
+
+/* CTA banner – remove outer border the glow-panel utility adds */
+#cta.glow-panel {
+  border: none;
+}
+
+/* ================= FOOTER (single authoritative block) ============== */
+.site-footer           { background:#000; color:#ccc; padding:4rem 0; }
+.site-footer .container{ max-width:72rem; margin:0 auto; padding:0 1rem; }
+
+.footer-grid{
+	display:grid;
+	gap:2.5rem 4rem;
+	grid-template-columns:minmax(180px,1.25fr) repeat(2,minmax(140px,1fr));
+}
+
+.footer-col h4         { margin:0 0 1rem; font:600 1rem/1 Inter,sans-serif; color:#fff; }
+.footer-site-title     { font:700 1.5rem/1 Inter,sans-serif; color:#fff; margin:0 0 .75rem; }
+.footer-tagline        { margin:0; max-width:22ch; color:#bfbfbf; font-size:.92rem; }
+
+.footer-menu           { list-style:none; margin:0; padding:0; }
+.footer-menu li+li     { margin-top:.3rem; }
+.footer-menu a         { color:#ccc; text-decoration:none; transition:color .15s; }
+.footer-menu a:hover,
+.footer-menu a:focus   { color:#fff; }
+
+@media(max-width:900px){
+	.footer-grid { grid-template-columns:1fr 1fr; }
+	.footer-menu a,
+	.footer-tagline{ font-size:.9rem; }
+}
+
+/* kill any block-editor separator that sneaks in above the footer */
+.wp-block-separator{ display:none!important; }
+/* ── FINAL footer override (keep this at the very bottom) ───────── */
+
+/* 1. Stop .site-footer itself from becoming a grid */
+.site-footer       { display:block !important; }
+
+/* 2. Constrain the real grid + give it columns & width */
+.site-footer .footer-grid{
+    display:grid;
+    gap:2.5rem 4rem;
+    grid-template-columns: minmax(180px,1.25fr) repeat(2,minmax(140px,1fr));
+    max-width:72rem;         /* ≈1150 px – matches other sections */
+    margin:0 auto;
+    padding:0 1rem;
+}
+
+/* 3. Make sure the logo can show */
+.site-footer .custom-logo-link{ display:inline-block; }
+.site-footer img.custom-logo  { max-width:160px; height:auto; }
+
+/* 4. Bullet-proof list + kill stray block editor HR */
+.footer-menu, .footer-menu li{ list-style:none; margin:0; padding:0; }
+.wp-block-separator          { display:none!important; }
+
+
+/* ===============================================================
+   9. Generic Content  (applies to every page & post)
+   =============================================================== */
+
+/* 1) Constrain the main content column and center it */
+.site-inner,
+.content,
+.entry,
+.entry-content {
+    margin-top: 3rem;
+    max-width: var(--container-max, 72rem);
+    margin-inline: auto;
+    padding-inline: var(--space-5, 1rem);
+}
+
+/* 2) Vertical rhythm – every block that follows another gets top-spacing */
+.entry-content > * + * {
+    margin-top: var(--space-6, 2rem);
+}
+
+/* 3) Headings */
+
+h1.entry-title {
+  font-size: 2rem;
+}
+
+.entry-content h1,
+.entry-content h2,
+.entry-content h3,
+.entry-content h4,
+.entry-content h5,
+.entry-content h6 {
+    font-weight: 400;
+    line-height: 1.2;
+    letter-spacing: -.015em;
+    margin-top: var(--space-8, 3rem);
+}
+
+.entry-content h1 { font-size: clamp(2.25rem, 6vw, 3rem); }
+.entry-content h2 { font-size: clamp(1.75rem, 5vw, 2.25rem); }
+.entry-content h3 { font-size: clamp(1.5rem, 4vw, 1.75rem); }
+
+/* 4) Body copy */
+.entry-content p {
+    font-size: 1.125rem;
+    line-height: 1.6;
+}
+
+.entry-content hr {
+    border: none;
+    border-top: 1px solid var(--colour-border, #6b6b6b);
+    margin: var(--space-6, 2rem) 0;
+}
+
+/* 5) Responsive media */
+.entry-content img,
+.entry-content video,
+.entry-content figure {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--radius-lg, 0.5rem);
+    box-shadow: 0 6px 16px rgb(0 0 0 / .12);
+}
+
+/* 6) Blockquotes */
+.entry-content blockquote {
+    border-inline-start: 4px solid var(--colour-primary, #1e90ff);
+    padding-inline-start: var(--space-5, 1rem);
+    font-style: italic;
+    color: var(--colour-text-muted, #9aa0a6);
+}
+
+/* 7) Lists */
+.entry-content ul,
+.entry-content ol {
+    padding-inline-start: var(--space-6, 1.5rem);
+    line-height: 1.5;
+}
+
+/* 8) Tables */
+.entry-content table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+}
+
+.entry-content th,
+.entry-content td {
+    padding: var(--space-3, 0.75rem) var(--space-4, 1rem);
+    border: 1px solid var(--colour-border, #333);
+}
+
+/* 9) Code blocks */
+.entry-content pre,
+.entry-content code {
+    font-family: var(--font-mono, Consolas, monospace);
+    background: var(--colour-surface, #111);
+    color: var(--colour-primary, #1e90ff);
+    padding: var(--space-2, 0.5rem) var(--space-3, 0.75rem);
+    border-radius: var(--radius-sm, 4px);
+}
+
+/* 10) Responsive embeds / iframes */
+.entry-content iframe,
+.entry-content .wp-block-embed {
+    aspect-ratio: 16 / 9;
+    width: 100%;
+    height: auto;
+}
+
+/* 11) Gutenberg “wide” and “full” alignments */
+.alignwide {
+    margin-inline: calc(-1 * var(--space-5, 1rem));
+    max-width: min(90vw, 1200px);
+}
+.alignfull {
+    margin-inline: calc(-50vw + 50%);
+    width: 100vw;
+}
+
+/* 12) Mobile tweaks */
+@media (max-width: 768px) {
+    .entry-content h1 { font-size: 2rem; }
+    .entry-content h2 { font-size: 1.75rem; }
+    .entry-content h3 { font-size: 1.5rem; }
+    .entry-content p  { font-size: 1rem; }
 }
