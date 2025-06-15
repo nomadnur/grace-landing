@@ -939,6 +939,14 @@ a:hover, a:focus { color: var(--colour-primary-hover); } /* darker teal */
     padding:0 1rem;
 }
 
+@media(max-width:900px){
+    .site-footer .footer-grid{ grid-template-columns:1fr 1fr; }
+}
+
+@media(max-width:600px){
+    .site-footer .footer-grid{ grid-template-columns:1fr; }
+}
+
 /* 3. Make sure the logo can show */
 .site-footer .custom-logo-link{ display:inline-block; }
 .site-footer img.custom-logo  { max-width:160px; height:auto; }
