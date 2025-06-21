@@ -322,9 +322,6 @@ header.site-header .nav-toggle.open .nav-toggle__bar::after {
   max-width: 720px;
   margin-inline: auto;
   margin-bottom: var(--space-5);
-  position: relative;   /* keep media above the gradient */
-  z-index: 1;
-  overflow: visible;
 }
 
 .hero__media img,
@@ -339,6 +336,40 @@ header.site-header .nav-toggle.open .nav-toggle__bar::after {
 {
   margin-top: 0;
 }
+
+/* ===================================
+   Hero blurred gradient background
+=================================== */
+.hero.glow::before {
+  content: "";
+  position: absolute;
+  /* centre it roughly under the video */
+  left: 50%; top: 55%;
+  width: 800px; height: 600px;
+  transform: translate(-50%, -50%);
+  background:
+      radial-gradient(450px 350px at 30% 30%, var(--grad-a) 0%, transparent 70%),
+      radial-gradient(450px 450px at 70% 70%, var(--grad-b) 0%, transparent 70%),
+      radial-gradient(600px 600px at 50% 40%, var(--grad-c) 0%, transparent 70%);
+  filter: blur(140px);
+  z-index: -1;          /* pushes it under the video & text */
+  opacity: .55;
+  pointer-events: none;   /* preserve clicks on video */
+}
+
+/* ===================================
+   Hero – keep gradient *behind* video
+=================================== */
+
+
+/* Optional safety net: make sure the media sits above 0 */
+.hero__media {
+  position: relative;   /* stacking context for video */
+  z-index: 1;           /* sits above the glow */
+  overflow: visible;    /* let the glow wrap under if it overlaps */
+}
+
+
 
 /* ===================================
    4. Brands (logo strip)
@@ -478,6 +509,34 @@ header.site-header .nav-toggle.open .nav-toggle__bar::after {
   color: var(--colour-text-muted);
 }
 
+/* Re-apply the responsive grid you set earlier */
+.testimonials .cards {
+  display: grid;
+  gap: var(--space-6);
+  grid-template-columns: repeat(3, 1fr);
+  margin: 0;  
+}
+
+/* Tablet: 2 columns */
+@media (max-width: 1024px) {
+  .testimonials .cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Mobile: 1 column */
+@media (max-width: 600px) {
+  .testimonials .cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Card reset so they fill their grid cell */
+.testimonials .card {
+  width: 100%;
+  margin: 0;
+}
+
 .testimonials figure {
   margin: 0;
 }
@@ -512,9 +571,6 @@ header.site-header .nav-toggle.open .nav-toggle__bar::after {
 .cta {
   position: relative;
   overflow: hidden;   /* keep pseudo element inside */
-  background: var(--colour-surface);
-  text-align: center;
-  padding-block: var(--space-8);
 }
 
 .cta::before {
@@ -579,7 +635,7 @@ header.site-header .nav-toggle.open .nav-toggle__bar::after {
   background: none;
   border: none;
   color: var(--colour-text-muted);
-  padding-inline: var(--space-4);
+  /* padding-inline: var(--space-4);  ← delete or comment this to fix non square button */
 }
 
 .ask__tags {
@@ -590,6 +646,343 @@ header.site-header .nav-toggle.open .nav-toggle__bar::after {
 
 .ask__tags input { accent-color: var(--colour-primary); }
 
+/* ===================================================
+   ASK • “How can I help?” section styling per Figma
+=================================================== */
+.ask {
+  padding-block: var(--space-8) var(--space-6);
+  text-align: center;
+}
+
+/* Section heading */
+.ask > h2 {
+  margin: 0 0 var(--space-4);
+}
+
+/* Two-line subhead */
+.ask .section-lead {
+  font-size: var(--fs-600);      /* Body-L */
+  color: var(--colour-text-muted);
+  max-width: 48ch;
+  margin: 0 auto var(--space-6);
+  line-height: 1.5;
+}
+
+/* Chat form wrapper */
+.ask__form {
+  display: flex;
+  align-items: center;
+  max-width: 680px;
+  margin: 0 auto var(--space-4);
+  background: var(--colour-surface);
+  border-radius: var(--radius-lg);
+  padding: var(--space-3) var(--space-4);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+/* Input field */
+.ask__form input[type="search"] {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--colour-text);
+  font-size: var(--fs-500);
+  line-height: 1.4;
+  padding: var(--space-2) 0;
+}
+.ask__form input::placeholder {
+  color: var(--colour-text-muted);
+}
+
+/* Send button (paper plane) */
+.ask__form button {
+  background: transparent;
+  border: none;
+  color: var(--colour-text-muted);
+  font-size: 1.25rem;
+  cursor: pointer;
+}
+.ask__form button:hover,
+.ask__form button:focus {
+  color: var(--colour-text);
+}
+
+/* Mode toggles */
+.ask__tags {
+  display: inline-flex;
+  gap: var(--space-3);
+}
+.ask__tags label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  background: var(--colour-bg);
+  border: 1px solid var(--colour-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--fs-400);
+  color: var(--colour-text-muted);
+  cursor: pointer;
+  transition: background .2s, color .2s, border-color .2s;
+}
+.ask__tags input {
+  display: none;
+}
+.ask__tags input:checked + span,
+.ask__tags input:checked + .tag-icon,
+.ask__tags input:checked + span + .tag-icon {
+  background: var(--colour-primary);
+  color: #fff;
+  border-color: var(--colour-primary);
+}
+
+/* 1. Match H2 size */
+.ask > h2 {
+  text-align: center;
+  margin: 0 0 var(--space-4);
+}
+
+/* 2. Chat box layout tweaks */
+.ask__form {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);          /* space between elements */
+  max-width: 680px;
+  margin: 0 auto var(--space-6);
+  background: var(--colour-surface);
+  border-radius: var(--radius-lg);
+  padding: var(--space-3) var(--space-4);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+}
+
+/* let the input grow, keep toggles & button at natural size */
+.ask__form input[type="search"] {
+  flex: 1 1 auto;
+  margin-right: var(--space-3);
+}
+
+/* 3. Pills now live inside the form */
+.ask__tags {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.ask__tags label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  background: var(--colour-bg);
+  border: 1px solid var(--colour-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--fs-400);
+  color: var(--colour-text-muted);
+  cursor: pointer;
+  transition: background .2s, border-color .2s, color .2s;
+}
+
+.ask__tags input {
+  display: none;
+}
+
+/* icon inside the pill */
+.ask__tags .tag-icon {
+  width: 1em;
+  height: 1em;
+  fill: var(--colour-text-muted);
+  transition: fill .2s;
+}
+
+.ask__tags input:checked + .tag-icon,
+.ask__tags input:checked + .tag-icon + span,
+.ask__tags input:checked + span + .tag-icon {
+  background: var(--colour-primary);
+  border-color: var(--colour-primary);
+  color: #fff;
+}
+
+.ask__tags input:checked + .tag-icon {
+  fill: #fff;
+}
+
+/* 4. Shrink the button margin now the tags moved */
+.ask__form button {
+  border: 1px solid var(--colour-border);
+  border-radius: 100%;
+  width:40px;
+  height: 40px;
+}
+
+/* ─── Ask Section: vertical form layout ─────────────────── */
+.ask__form {
+  display: flex;
+  flex-direction: column;     /* stack input-row over toggles */
+  align-items: stretch;
+  max-width: 680px;
+  margin: 0 auto var(--space-6);
+  background: var(--colour-surface);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+}
+
+/*  Input + send icon side-by-side */
+.ask__input-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+/* full-width input */
+.ask__input-row input[type="search"] {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--colour-text);
+  font-size: var(--fs-500);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+}
+
+/*  Toggles below the input row */
+.ask__tags {
+  display: flex;
+  justify-content: start;     /* or center if you prefer */
+  gap: var(--space-3);
+  align-items: center;
+  width: 100%;           /* ← ensure it fills the parent */
+
+}
+
+/* pill-style labels (unchanged) */
+.ask__tags label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  background: var(--colour-bg);
+  border: 1px solid var(--colour-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--fs-400);
+  color: var(--colour-text-muted);
+  cursor: pointer;
+}
+.ask__tags input { display: none; }
+
+/* checked state */
+.ask__tags input:checked + span {
+  background: var(--colour-primary);
+  color: #fff;
+  border-color: var(--colour-primary);
+}
+
+/* Style the send button like the other pills */
+.ask__tags .tag-button {
+  background: var(--colour-bg);
+  border: 1px solid var(--colour-border);
+  border-radius: 100%;
+  padding: var(--space-2) var(--space-3);
+  /*display: flex;*/
+  align-items: center;
+  cursor: pointer;
+  transition: background .2s, border-color .2s, color .2s;
+  color: var(--colour-text-muted);
+  font-size: var(--fs-400);
+  margin-left: auto;              /* ← pushes this item to the end */
+  display: inline-flex;           /* use flex on the button itself */
+  align-items: center;            /* vertical centering */
+  justify-content: center;        /* horizontal centering */
+  padding: 0;                     /* reset padding so width/height apply */
+}
+
+/* Make the SVG inside scale like the text */
+.ask__tags .tag-button svg {
+  width: 1em;
+  height: 1em;
+  fill: var(--colour-text-muted);
+  margin: 0;
+}
+
+/* Hover/active state */
+.ask__tags .tag-button:hover,
+.ask__tags .tag-button:focus {
+  background: var(--colour-primary);
+  border-color: var(--colour-primary);
+  color: #fff;
+}
+.ask__tags .tag-button:hover svg,
+.ask__tags .tag-button:focus svg {
+  fill: #fff;
+}
+
+@media (max-width: 640px) {
+  .ask__tags .tag-button {
+    padding: 0 !important;   /* kill the stray padding */
+    width: 2.5rem;           /* or var(--space-7) */
+    height: 2.5rem;
+  }
+}
+
+/* ------------------------------------------------------------------
+   Hide the icons inside the mode-toggle pills on very small screens
+   (iPhone 12 = 390 px, so we pick 425 px to be safe)
+------------------------------------------------------------------- */
+@media (max-width: 425px) {
+
+  /* 1. Hide the <img> icons */
+  .ask__tags label img {
+    display: none;
+  }
+
+  /* 2. Close the space that the icon used to occupy               */
+  .ask__tags label {
+    padding-left: var(--space-4);   /* remove extra gap on left   */
+    padding-right: var(--space-4);  /* keep pills balanced        */
+  }
+
+}
+
+
+/* ─────────────────────────────────────────────
+   Ask • toggle-pill hover & active states
+───────────────────────────────────────────── */
+
+/* 1) On hover or keyboard focus, all pills light up */
+.ask__tags label:hover,
+.ask__tags label:focus-within {
+  background: var(--colour-primary);
+  border-color: var(--colour-primary);
+  color: #fff;
+}
+.ask__tags label:hover svg,
+.ask__tags label:focus-within svg {
+  fill: #fff;
+}
+
+/* 2) When a radio is checked, its parent label stays “active” */
+@supports(selector(:has(*))) {
+  .ask__tags label:has(input:checked) {
+    background: var(--colour-primary);
+    border-color: var(--colour-primary);
+    color: #fff;
+  }
+  .ask__tags label:has(input:checked) svg {
+    fill: #fff;
+  }
+}
+
+/* 3) Keep the send-button matching the same pill hover style */
+.ask__tags .tag-button:hover,
+.ask__tags .tag-button:focus {
+  background: var(--colour-primary);
+  border-color: var(--colour-primary);
+  color: #fff;
+}
+.ask__tags .tag-button:hover svg,
+.ask__tags .tag-button:focus svg {
+  fill: #fff;
+}
 
 
 
@@ -623,6 +1016,11 @@ header.site-header .nav-toggle.open .nav-toggle__bar::after {
 /* ===================================
    10. CTA Banner
 =================================== */
+.cta {
+  background: var(--colour-surface);
+  text-align: center;
+  padding-block: var(--space-8);
+}
 
 /* ===================================
    11. Footer
@@ -632,6 +1030,42 @@ header.site-header .nav-toggle.open .nav-toggle__bar::after {
 
 .footer-nav a { text-decoration: none; color: var(--colour-text-muted); }
 .footer-nav a:hover { color: var(--colour-text); }
+
+/* =====================================================
+   HERO — blurred gradient + slow drift animation
+===================================================== */
+
+/* 0 ▸ make <section class="hero"> a stacking context  */
+.hero { position: relative; }
+
+/* 1 ▸ static glow layer (z-index stays default 0)     */
+.hero::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 55%;
+  width: 800px;
+  height: 600px;
+
+  /*  ✦  IMPORTANT:  this “from” position == keyframe start  */
+  transform: translate(-50%, -55%);
+
+  background:
+    radial-gradient(450px 350px at 30% 30%, var(--grad-a) 0%, transparent 70%),
+    radial-gradient(450px 450px at 70% 70%, var(--grad-b) 0%, transparent 70%),
+    radial-gradient(600px 600px at 50% 40%, var(--grad-c) 0%, transparent 70%);
+  filter: blur(140px);
+  opacity: .55;
+  pointer-events: none;
+}
+
+/* =====================================================
+   HERO • final subtle gradient drift
+   (keeps accessibility-friendly motion guard)
+===================================================== */
+
+.hero { position: relative; }           /* already present */
+
 /* Static glow layer */
 .hero::before {
   content: "";
@@ -950,11 +1384,11 @@ a:hover, a:focus { color: var(--colour-primary-hover); } /* darker teal */
 }
 
 @media(max-width:900px){
-    .site-footer .footer-grid{ grid-template-columns:1fr 1fr; }
+  .site-footer .footer-grid{ grid-template-columns:1fr 1fr; }
 }
 
 @media(max-width:600px){
-    .site-footer .footer-grid{ grid-template-columns:1fr; }
+  .site-footer .footer-grid{ grid-template-columns:1fr; }
 }
 
 /* 3. Make sure the logo can show */
@@ -1089,10 +1523,10 @@ h1.entry-title {
 
 /* 12) Mobile tweaks */
 @media (max-width: 768px) {
-    .entry-content h1 { font-size: 2rem; }
-    .entry-content h2 { font-size: 1.75rem; }
-    .entry-content h3 { font-size: 1.5rem; }
-    .entry-content p  { font-size: 1rem; }
-    .hero__title     { font-size: var(--fs-800); }
-    h2 {font-size: var(--fs-700);}
+  .entry-content h1 { font-size: 2rem; }
+  .entry-content h2 { font-size: 1.75rem; }
+  .entry-content h3 { font-size: 1.5rem; }
+  .entry-content p  { font-size: 1rem; }
+  .hero__title     { font-size: var(--fs-800); }
+  h2 {font-size: var(--fs-700);}
 }
