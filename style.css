@@ -370,6 +370,77 @@ header.site-header .nav-toggle.open .nav-toggle__bar::after {
 }
 
 
+/* =====================================================
+   HERO — blurred gradient + slow drift animation
+===================================================== */
+
+/* 0 ▸ make <section class="hero"> a stacking context  */
+.hero { position: relative; }
+
+/* 1 ▸ static glow layer (z-index stays default 0)     */
+.hero::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 55%;
+  width: 800px;
+  height: 600px;
+
+  /*  ✦  IMPORTANT:  this “from” position == keyframe start  */
+  transform: translate(-50%, -55%);
+
+  background:
+    radial-gradient(450px 350px at 30% 30%, var(--grad-a) 0%, transparent 70%),
+    radial-gradient(450px 450px at 70% 70%, var(--grad-b) 0%, transparent 70%),
+    radial-gradient(600px 600px at 50% 40%, var(--grad-c) 0%, transparent 70%);
+  filter: blur(140px);
+  opacity: .55;
+  pointer-events: none;
+}
+
+/* =====================================================
+   HERO • final subtle gradient drift
+   (keeps accessibility-friendly motion guard)
+===================================================== */
+
+.hero { position: relative; }           /* already present */
+
+/* Static glow layer */
+.hero::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 55%;
+  width: 800px;
+  height: 600px;
+
+  /* Match the keyframe start so there’s no first-frame jump */
+  transform: translate(-50%, -55%);
+
+  background:
+    radial-gradient(450px 350px at 30% 30%, var(--grad-a) 0%, transparent 70%),
+    radial-gradient(450px 450px at 70% 70%, var(--grad-b) 0%, transparent 70%),
+    radial-gradient(600px 600px at 50% 40%, var(--grad-c) 0%, transparent 70%);
+  filter: blur(140px);       /* back to soft haze */
+  opacity: .55;              /* back to gentle contrast */
+  pointer-events: none;
+}
+
+/* Run only if the user hasn’t disabled motion */
+@media (prefers-reduced-motion: no-preference) {
+
+  /* Tiny drift + slight rotation */
+  @keyframes blobmove {
+    from { transform: translate(-50%, -55%) rotate(0deg); }
+    to   { transform: translate(-48%, -50%) rotate(2deg); }
+  }
+
+  .hero::before {
+    animation: blobmove 35s linear infinite alternate;
+  }
+}
+
+
 
 /* ===================================
    4. Brands (logo strip)
@@ -389,6 +460,49 @@ header.site-header .nav-toggle.open .nav-toggle__bar::after {
 }
 
 .brands__grid img { filter: grayscale(1); opacity: .8; max-width: 100%; }
+
+/* =========================================================
+   TRUST LOGOS • Infinite scroll → RIGHT (no blank gap)
+========================================================= */
+
+.logo-marquee {
+  overflow: hidden;
+  max-width: var(--container-max);   /* aligns with other sections */
+  margin-inline: auto;
+  padding-inline: var(--space-5);
+
+  /* optional edge fade */
+  mask-image: linear-gradient(to right,
+                transparent 0%, #000 7%, #000 93%, transparent 100%);
+}
+
+/* ---- sliding track ---- */
+.marquee__track {
+  display: inline-flex;
+  gap: var(--space-8);         /* ≈64 px space between logos */
+  align-items: center;
+
+  /* Start one-third left, then glide to 0  →  keeps view filled */
+  transform: translateX(-33.333%);
+  animation: scrollRightLoop 38s linear infinite;
+}
+
+/* full-colour logos */
+.marquee__track img {
+  max-height: 52px;
+  flex: 0 0 auto;
+}
+
+/* keyframes:  -33.333 %  →  0 %  (track moves right) */
+@keyframes scrollRightLoop {
+  from { transform: translateX(-33.333%); }
+  to   { transform: translateX(0%); }
+}
+
+/* Pause motion for users requesting reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .marquee__track { animation: none; transform: translateX(0); }
+}
 
 /* ===================================
    5. Testimonials
@@ -1031,118 +1145,6 @@ header.site-header .nav-toggle.open .nav-toggle__bar::after {
 .footer-nav a { text-decoration: none; color: var(--colour-text-muted); }
 .footer-nav a:hover { color: var(--colour-text); }
 
-/* =====================================================
-   HERO — blurred gradient + slow drift animation
-===================================================== */
-
-/* 0 ▸ make <section class="hero"> a stacking context  */
-.hero { position: relative; }
-
-/* 1 ▸ static glow layer (z-index stays default 0)     */
-.hero::before {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: 55%;
-  width: 800px;
-  height: 600px;
-
-  /*  ✦  IMPORTANT:  this “from” position == keyframe start  */
-  transform: translate(-50%, -55%);
-
-  background:
-    radial-gradient(450px 350px at 30% 30%, var(--grad-a) 0%, transparent 70%),
-    radial-gradient(450px 450px at 70% 70%, var(--grad-b) 0%, transparent 70%),
-    radial-gradient(600px 600px at 50% 40%, var(--grad-c) 0%, transparent 70%);
-  filter: blur(140px);
-  opacity: .55;
-  pointer-events: none;
-}
-
-/* =====================================================
-   HERO • final subtle gradient drift
-   (keeps accessibility-friendly motion guard)
-===================================================== */
-
-.hero { position: relative; }           /* already present */
-
-/* Static glow layer */
-.hero::before {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: 55%;
-  width: 800px;
-  height: 600px;
-
-  /* Match the keyframe start so there’s no first-frame jump */
-  transform: translate(-50%, -55%);
-
-  background:
-    radial-gradient(450px 350px at 30% 30%, var(--grad-a) 0%, transparent 70%),
-    radial-gradient(450px 450px at 70% 70%, var(--grad-b) 0%, transparent 70%),
-    radial-gradient(600px 600px at 50% 40%, var(--grad-c) 0%, transparent 70%);
-  filter: blur(140px);       /* back to soft haze */
-  opacity: .55;              /* back to gentle contrast */
-  pointer-events: none;
-}
-
-/* Run only if the user hasn’t disabled motion */
-@media (prefers-reduced-motion: no-preference) {
-
-  /* Tiny drift + slight rotation */
-  @keyframes blobmove {
-    from { transform: translate(-50%, -55%) rotate(0deg); }
-    to   { transform: translate(-48%, -50%) rotate(2deg); }
-  }
-
-  .hero::before {
-    animation: blobmove 35s linear infinite alternate;
-  }
-}
-
-/* =========================================================
-   TRUST LOGOS • Infinite scroll → RIGHT (no blank gap)
-========================================================= */
-
-.logo-marquee {
-  overflow: hidden;
-  max-width: var(--container-max);   /* aligns with other sections */
-  margin-inline: auto;
-  padding-inline: var(--space-5);
-
-  /* optional edge fade */
-  mask-image: linear-gradient(to right,
-                transparent 0%, #000 7%, #000 93%, transparent 100%);
-}
-
-/* ---- sliding track ---- */
-.marquee__track {
-  display: inline-flex;
-  gap: var(--space-8);         /* ≈64 px space between logos */
-  align-items: center;
-
-  /* Start one-third left, then glide to 0  →  keeps view filled */
-  transform: translateX(-33.333%);
-  animation: scrollRightLoop 38s linear infinite;
-}
-
-/* full-colour logos */
-.marquee__track img {
-  max-height: 52px;
-  flex: 0 0 auto;
-}
-
-/* keyframes:  -33.333 %  →  0 %  (track moves right) */
-@keyframes scrollRightLoop {
-  from { transform: translateX(-33.333%); }
-  to   { transform: translateX(0%); }
-}
-
-/* Pause motion for users requesting reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .marquee__track { animation: none; transform: translateX(0); }
-}
 
 /* =====================================================
    CTA  •  Framer-style panel + animated glow
