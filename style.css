@@ -11,6 +11,24 @@
  Text Domain:  askgrace
 */
 
+/* ------------------------------------------------------------------
+   AskGrace Child Theme — CLEANED CSS (v1.1.0-alpha)
+   ------------------------------------------------------------------
+   Sections
+   0.  Design tokens              (variables)
+   1.  Global reset / base        (type, containers, buttons)
+   2.  Header                     (logo | nav | CTA | mobile nav)
+   3.  Hero                       (video + glow)
+   4.  Brands                     (logo strip)
+   5.  Testimonials               (cards grid)
+   6.  ROI / CTA strip            (glow-panel utility)
+   7.  Steps                      (3-step grid)
+   8.  Ask (chat demo)            (single authoritative block)
+   9.  FAQ
+   10. CTA banner (simple)
+   11. Footer                     (grid)
+   12. Generic content / blocks   (blog & pages)
+------------------------------------------------------------------- */
 /* Your CSS variables and rules go here: */
 /* ===================================
    0. Design Tokens
@@ -1401,7 +1419,7 @@ a:hover, a:focus { color: var(--colour-primary-hover); } /* darker teal */
 
 
 /* ===============================================================
-   9. Generic Content  (applies to every page & post)
+   12. Generic content / blocks  (applies to every page & post)
    =============================================================== */
 
 /* 1) Constrain the main content column and center it */
