@@ -509,27 +509,6 @@ header.site-header .nav-toggle.open .nav-toggle__bar::after {
   color: var(--colour-text-muted);
 }
 
-/* Re-apply the responsive grid you set earlier */
-.testimonials .cards {
-  display: grid;
-  gap: var(--space-6);
-  grid-template-columns: repeat(3, 1fr);
-  margin: 0;  
-}
-
-/* Tablet: 2 columns */
-@media (max-width: 1024px) {
-  .testimonials .cards {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-/* Mobile: 1 column */
-@media (max-width: 600px) {
-  .testimonials .cards {
-    grid-template-columns: 1fr;
-  }
-}
 
 /* Card reset so they fill their grid cell */
 .testimonials .card {
