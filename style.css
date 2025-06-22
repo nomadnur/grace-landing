@@ -29,6 +29,7 @@
    11. Footer                     (grid)
    12. Generic content / blocks   (blog & pages)
 ------------------------------------------------------------------- */
+
 /* Your CSS variables and rules go here: */
 /* ===================================
    0. Design Tokens
@@ -320,9 +321,6 @@ header.site-header .nav-toggle.open .nav-toggle__bar::after {
 }
 
 
-
-
-
 /* ===================================
    3. Hero
 =================================== */
@@ -355,9 +353,7 @@ header.site-header .nav-toggle.open .nav-toggle__bar::after {
   margin-top: 0;
 }
 
-/* ===================================
-   Hero blurred gradient background
-=================================== */
+/* === Hero blurred gradient background. === */
 .hero.glow::before {
   content: "";
   position: absolute;
@@ -375,10 +371,7 @@ header.site-header .nav-toggle.open .nav-toggle__bar::after {
   pointer-events: none;   /* preserve clicks on video */
 }
 
-/* ===================================
-   Hero – keep gradient *behind* video
-=================================== */
-
+/* === Hero – keep gradient *behind* video === */
 
 /* Optional safety net: make sure the media sits above 0 */
 .hero__media {
@@ -387,6 +380,133 @@ header.site-header .nav-toggle.open .nav-toggle__bar::after {
   overflow: visible;    /* let the glow wrap under if it overlaps */
 }
 
+/* === HERO — blurred gradient + slow drift animation === */
+
+/* 0 ▸ make <section class="hero"> a stacking context  */
+.hero { position: relative; }
+
+/* 1 ▸ static glow layer (z-index stays default 0)     */
+.hero::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 55%;
+  width: 800px;
+  height: 600px;
+
+  /*  ✦  IMPORTANT:  this “from” position == keyframe start  */
+  transform: translate(-50%, -55%);
+
+  background:
+    radial-gradient(450px 350px at 30% 30%, var(--grad-a) 0%, transparent 70%),
+    radial-gradient(450px 450px at 70% 70%, var(--grad-b) 0%, transparent 70%),
+    radial-gradient(600px 600px at 50% 40%, var(--grad-c) 0%, transparent 70%);
+  filter: blur(140px);
+  opacity: .55;
+  pointer-events: none;
+}
+
+/* === HERO • final subtle gradient drift (keeps accessibility-friendly motion guard) === */
+
+.hero { position: relative; }
+
+/* Static glow layer */
+.hero::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 55%;
+  width: 800px;
+  height: 600px;
+
+  /* Match the keyframe start so there’s no first-frame jump */
+  transform: translate(-50%, -55%);
+
+  background:
+    radial-gradient(450px 350px at 30% 30%, var(--grad-a) 0%, transparent 70%),
+    radial-gradient(450px 450px at 70% 70%, var(--grad-b) 0%, transparent 70%),
+    radial-gradient(600px 600px at 50% 40%, var(--grad-c) 0%, transparent 70%);
+  filter: blur(140px);       /* back to soft haze */
+  opacity: .55;              /* back to gentle contrast */
+  pointer-events: none;
+}
+
+/* Run only if the user hasn’t disabled motion */
+@media (prefers-reduced-motion: no-preference) {
+
+  /* Tiny drift + slight rotation */
+  @keyframes blobmove {
+    from { transform: translate(-50%, -55%) rotate(0deg); }
+    to   { transform: translate(-48%, -50%) rotate(2deg); }
+  }
+
+  .hero::before {
+    animation: blobmove 35s linear infinite alternate;
+  }
+}
+
+/* =====================================================
+   Video Cover  •  
+   -----------------------------------------------------
+   uses video.js to swap the poster image with the video iframe
+   when the play button is clicked.
+   Requires a video.js setup in HTML.
+   The poster image should be set as the background of the .video-poster element.
+===================================================== */
+
+/* Add to style.css */
+.video-wrapper {
+  width: 100%;
+  overflow: hidden;
+  border-radius: 1rem; /* optional: rounded corners */
+  background: #000;
+  position: relative;         /* create stacking context */
+  aspect-ratio: 16 / 9;       /* modern, CSS-native ratio */
+}
+
+
+.video-wrapper iframe {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.video-poster,
+.video-iframe {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.video-poster img {
+  display: block;
+  object-fit: cover;
+  width: 100%; height: 100%;
+}
+
+.video-poster__play {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--colour-primary);
+  border: none;
+  border-radius: 50%;
+  width: 64px; height: 64px;
+  cursor: pointer;
+  z-index: 2;
+}
+.video-poster__play::before {
+  content: '';
+  position: absolute; inset: 0;
+  margin: auto;
+  width: 0; height: 0;
+  border-left: 22px solid #fff;
+  border-top: 14px solid transparent;
+  border-bottom: 14px solid transparent;
+}
 
 
 /* ===================================
@@ -407,6 +527,49 @@ header.site-header .nav-toggle.open .nav-toggle__bar::after {
 }
 
 .brands__grid img { filter: grayscale(1); opacity: .8; max-width: 100%; }
+
+/* =========================================================
+   Brands • Infinite scroll → RIGHT (no blank gap)
+========================================================= */
+
+.logo-marquee {
+  overflow: hidden;
+  max-width: var(--container-max);   /* aligns with other sections */
+  margin-inline: auto;
+  padding-inline: var(--space-5);
+
+  /* optional edge fade */
+  mask-image: linear-gradient(to right,
+                transparent 0%, #000 7%, #000 93%, transparent 100%);
+}
+
+/* ---- sliding track ---- */
+.marquee__track {
+  display: inline-flex;
+  gap: var(--space-8);         /* ≈64 px space between logos */
+  align-items: center;
+
+  /* Start one-third left, then glide to 0  →  keeps view filled */
+  transform: translateX(-33.333%);
+  animation: scrollRightLoop 38s linear infinite;
+}
+
+/* full-colour logos */
+.marquee__track img {
+  max-height: 52px;
+  flex: 0 0 auto;
+}
+
+/* keyframes:  -33.333 %  →  0 %  (track moves right) */
+@keyframes scrollRightLoop {
+  from { transform: translateX(-33.333%); }
+  to   { transform: translateX(0%); }
+}
+
+/* Pause motion for users requesting reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .marquee__track { animation: none; transform: translateX(0); }
+}
 
 /* ===================================
    5. Testimonials
@@ -527,6 +690,27 @@ header.site-header .nav-toggle.open .nav-toggle__bar::after {
   color: var(--colour-text-muted);
 }
 
+/* Re-apply the responsive grid you set earlier */
+.testimonials .cards {
+  display: grid;
+  gap: var(--space-6);
+  grid-template-columns: repeat(3, 1fr);
+  margin: 0;  
+}
+
+/* Tablet: 2 columns */
+@media (max-width: 1024px) {
+  .testimonials .cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Mobile: 1 column */
+@media (max-width: 600px) {
+  .testimonials .cards {
+    grid-template-columns: 1fr;
+  }
+}
 
 /* Card reset so they fill their grid cell */
 .testimonials .card {
@@ -603,7 +787,7 @@ header.site-header .nav-toggle.open .nav-toggle__bar::after {
 .step__icon { width: 48px; height: 48px; margin-bottom: var(--space-4); }
 
 /* ===================================
-   8. Ask (search demo)
+   8. Ask (chat demo)
 =================================== */
 .ask {
   text-align: center;
@@ -1010,6 +1194,53 @@ header.site-header .nav-toggle.open .nav-toggle__bar::after {
     margin: 0 0 var(--space-4);
 }
 
+/* ===== FAQ ====================================================== */
+.faq              { margin-top: 5rem; }
+.faq__list        { list-style: none; margin: 0; padding: 0; display: grid; gap: 1rem; }
+
+/* Question row --------------------------------------------------- */
+.faq__question {
+    display: flex;               /* text + plus icon on one line            */
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 1rem 1.25rem;
+    background: #111;            /* same dark panel as other sections       */
+    border: 1px solid #333;
+    border-radius: .75rem;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background .2s, border-color .2s;
+}
+.faq__question:hover,
+.faq__question:focus-visible {
+    background: #171717;
+    border-color: #555;
+    outline: none;
+}
+
+/* Icon ----------------------------------------------------------- */
+.faq__icon {
+    margin-left: 1rem;
+    font-size: 1.25rem;
+    line-height: 1;
+    transition: transform .25s;
+}
+.faq__question[aria-expanded="true"] .faq__icon {
+    transform: rotate(45deg);    /* +  →  × */
+}
+
+/* Answer panel --------------------------------------------------- */
+.faq__answer {
+    border-top: none;
+    border-radius: 0 0 .75rem .75rem;
+    padding: 1rem 1.25rem;
+    color: #ddd;
+    font-size: .95rem;
+}
+
 /* ===================================
    10. CTA Banner
 =================================== */
@@ -1019,126 +1250,9 @@ header.site-header .nav-toggle.open .nav-toggle__bar::after {
   padding-block: var(--space-8);
 }
 
-/* ===================================
-   11. Footer
-=================================== */
-
-.footer-nav ul { list-style: none; padding: 0; margin: 0; }
-
-.footer-nav a { text-decoration: none; color: var(--colour-text-muted); }
-.footer-nav a:hover { color: var(--colour-text); }
-
-/* =====================================================
-   HERO — blurred gradient + slow drift animation
-===================================================== */
-
-/* 0 ▸ make <section class="hero"> a stacking context  */
-.hero { position: relative; }
-
-/* 1 ▸ static glow layer (z-index stays default 0)     */
-.hero::before {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: 55%;
-  width: 800px;
-  height: 600px;
-
-  /*  ✦  IMPORTANT:  this “from” position == keyframe start  */
-  transform: translate(-50%, -55%);
-
-  background:
-    radial-gradient(450px 350px at 30% 30%, var(--grad-a) 0%, transparent 70%),
-    radial-gradient(450px 450px at 70% 70%, var(--grad-b) 0%, transparent 70%),
-    radial-gradient(600px 600px at 50% 40%, var(--grad-c) 0%, transparent 70%);
-  filter: blur(140px);
-  opacity: .55;
-  pointer-events: none;
-}
-
-/* =====================================================
-   HERO • final subtle gradient drift
-   (keeps accessibility-friendly motion guard)
-===================================================== */
-
-.hero { position: relative; }           /* already present */
-
-/* Static glow layer */
-.hero::before {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: 55%;
-  width: 800px;
-  height: 600px;
-
-  /* Match the keyframe start so there’s no first-frame jump */
-  transform: translate(-50%, -55%);
-
-  background:
-    radial-gradient(450px 350px at 30% 30%, var(--grad-a) 0%, transparent 70%),
-    radial-gradient(450px 450px at 70% 70%, var(--grad-b) 0%, transparent 70%),
-    radial-gradient(600px 600px at 50% 40%, var(--grad-c) 0%, transparent 70%);
-  filter: blur(140px);       /* back to soft haze */
-  opacity: .55;              /* back to gentle contrast */
-  pointer-events: none;
-}
-
-/* Run only if the user hasn’t disabled motion */
-@media (prefers-reduced-motion: no-preference) {
-
-  /* Tiny drift + slight rotation */
-  @keyframes blobmove {
-    from { transform: translate(-50%, -55%) rotate(0deg); }
-    to   { transform: translate(-48%, -50%) rotate(2deg); }
-  }
-
-  .hero::before {
-    animation: blobmove 35s linear infinite alternate;
-  }
-}
-
-/* =========================================================
-   TRUST LOGOS • Infinite scroll → RIGHT (no blank gap)
-========================================================= */
-
-.logo-marquee {
-  overflow: hidden;
-  max-width: var(--container-max);   /* aligns with other sections */
-  margin-inline: auto;
-  padding-inline: var(--space-5);
-
-  /* optional edge fade */
-  mask-image: linear-gradient(to right,
-                transparent 0%, #000 7%, #000 93%, transparent 100%);
-}
-
-/* ---- sliding track ---- */
-.marquee__track {
-  display: inline-flex;
-  gap: var(--space-8);         /* ≈64 px space between logos */
-  align-items: center;
-
-  /* Start one-third left, then glide to 0  →  keeps view filled */
-  transform: translateX(-33.333%);
-  animation: scrollRightLoop 38s linear infinite;
-}
-
-/* full-colour logos */
-.marquee__track img {
-  max-height: 52px;
-  flex: 0 0 auto;
-}
-
-/* keyframes:  -33.333 %  →  0 %  (track moves right) */
-@keyframes scrollRightLoop {
-  from { transform: translateX(-33.333%); }
-  to   { transform: translateX(0%); }
-}
-
-/* Pause motion for users requesting reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .marquee__track { animation: none; transform: translateX(0); }
+/* CTA banner – remove outer border the glow-panel utility adds */
+#cta.glow-panel {
+  border: none;
 }
 
 /* =====================================================
@@ -1212,130 +1326,14 @@ header.site-header .nav-toggle.open .nav-toggle__bar::after {
     0 2px 6px rgba(0,0,0,0.45);
 }
 
-/* =====================================================
-   Video Cover  •  
-   -----------------------------------------------------
-   uses video.js to swap the poster image with the video iframe
-   when the play button is clicked.
-   Requires a video.js setup in your HTML.
-   The poster image should be set as the background of the .video-poster element.
-===================================================== */
+/* ===================================
+   11. Footer
+=================================== */
 
-/* Add to style.css */
-.video-wrapper {
-  width: 100%;
-  overflow: hidden;
-  border-radius: 1rem; /* optional: rounded corners */
-  background: #000;
-  position: relative;         /* create stacking context */
-  aspect-ratio: 16 / 9;       /* modern, CSS-native ratio */
-}
+.footer-nav ul { list-style: none; padding: 0; margin: 0; }
 
-
-.video-wrapper iframe {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%;
-  height: 100%;
-  border: 0;
-}
-
-.video-poster,
-.video-iframe {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.video-poster img {
-  display: block;
-  object-fit: cover;
-  width: 100%; height: 100%;
-}
-
-.video-poster__play {
-  position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  background: var(--colour-primary);
-  border: none;
-  border-radius: 50%;
-  width: 64px; height: 64px;
-  cursor: pointer;
-  z-index: 2;
-}
-.video-poster__play::before {
-  content: '';
-  position: absolute; inset: 0;
-  margin: auto;
-  width: 0; height: 0;
-  border-left: 22px solid #fff;
-  border-top: 14px solid transparent;
-  border-bottom: 14px solid transparent;
-}
-
-/* 1. Remove bullet from single page lists used as nav placeholders */
-.page .entry-content > ul {
-  list-style: none;
-  margin-left: 0;
-}
-
-/* 2. Brand-coloured links instead of browser-purple */
-a { color: var(--colour-primary); }                /* teal example */
-a:hover, a:focus { color: var(--colour-primary-hover); } /* darker teal */
-
-/* ===== FAQ ====================================================== */
-.faq              { margin-top: 5rem; }
-.faq__list        { list-style: none; margin: 0; padding: 0; display: grid; gap: 1rem; }
-
-/* Question row --------------------------------------------------- */
-.faq__question {
-    display: flex;               /* text + plus icon on one line            */
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    padding: 1rem 1.25rem;
-    background: #111;            /* same dark panel as other sections       */
-    border: 1px solid #333;
-    border-radius: .75rem;
-    color: #fff;
-    font-size: 1rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background .2s, border-color .2s;
-}
-.faq__question:hover,
-.faq__question:focus-visible {
-    background: #171717;
-    border-color: #555;
-    outline: none;
-}
-
-/* Icon ----------------------------------------------------------- */
-.faq__icon {
-    margin-left: 1rem;
-    font-size: 1.25rem;
-    line-height: 1;
-    transition: transform .25s;
-}
-.faq__question[aria-expanded="true"] .faq__icon {
-    transform: rotate(45deg);    /* +  →  × */
-}
-
-/* Answer panel --------------------------------------------------- */
-.faq__answer {
-    border-top: none;
-    border-radius: 0 0 .75rem .75rem;
-    padding: 1rem 1.25rem;
-    color: #ddd;
-    font-size: .95rem;
-}
-
-/* CTA banner – remove outer border the glow-panel utility adds */
-#cta.glow-panel {
-  border: none;
-}
+.footer-nav a { text-decoration: none; color: var(--colour-text-muted); }
+.footer-nav a:hover { color: var(--colour-text); }
 
 /* ================= FOOTER (single authoritative block) ============== */
 .site-footer           { background:#000; color:#ccc; padding:4rem 0; }
@@ -1397,8 +1395,10 @@ a:hover, a:focus { color: var(--colour-primary-hover); } /* darker teal */
 .wp-block-separator          { display:none!important; }
 
 
+
+
 /* ===============================================================
-   12. Generic content / blocks  (applies to every page & post)
+   12. Generic Content  (applies to every page & post)
    =============================================================== */
 
 /* 1) Constrain the main content column and center it */
@@ -1451,6 +1451,11 @@ h1.entry-title {
     margin: var(--space-6, 2rem) 0;
 }
 
+/* Brand-coloured links instead of browser-purple */
+a { color: var(--colour-primary); }                /* teal example */
+a:hover, a:focus { color: var(--colour-primary-hover); } /* darker teal */
+
+
 /* 5) Responsive media */
 .entry-content img,
 .entry-content video,
@@ -1476,6 +1481,13 @@ h1.entry-title {
     padding-inline-start: var(--space-6, 1.5rem);
     line-height: 1.5;
 }
+
+/* Remove bullet from single page lists used as nav placeholders */
+.page .entry-content > ul {
+  list-style: none;
+  margin-left: 0;
+}
+
 
 /* 8) Tables */
 .entry-content table {
