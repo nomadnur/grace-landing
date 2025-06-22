@@ -50,7 +50,7 @@
   --colour-bg: #000;
   --colour-surface: #111;
   --colour-primary: #0270ED;
-  --colour-primary-hover: #0270ED;
+  --colour-primary-hover: #00438f;
   --colour-text: #fff;
   --colour-text-muted: #9ca3af;
   --colour-border: #1f2937;
@@ -101,6 +101,7 @@ body { margin: 0; }
 
 /* Typography shorthands */
 h1, h2, h3, h4, h5 { font-weight: 400; line-height: 1.2; margin: 0 0 var(--space-4);letter-spacing: -1px;}
+h1 { font-weight: 600;}
 h1 { font-size: var(--fs-900); }
 h2 { font-size: var(--fs-800); }
 h3 { font-size: var(--fs-700); }
@@ -133,7 +134,7 @@ p { margin: 0 0 var(--space-4); }
 }
 
 .btn--primary:hover,
-.btn--primary:focus-visible { background: var(--colour-primary-hover); }
+.btn--primary:focus-visible { background: var(--colour-primary-hover); color: var(--colour-text-muted); }
 
 .btn--ghost { background: transparent; color: var(--colour-text); border: 1px solid var(--colour-border); }
 
@@ -506,6 +507,7 @@ header.site-header .nav-toggle.open .nav-toggle__bar::after {
   border-left: 22px solid #fff;
   border-top: 14px solid transparent;
   border-bottom: 14px solid transparent;
+  left: 4px;
 }
 
 
@@ -1167,6 +1169,18 @@ header.site-header .nav-toggle.open .nav-toggle__bar::after {
 
 
 
+@media (max-width: 374px) {
+
+  /* reduce spacing to fit all */
+  .ask__tags label {
+        padding-left: var(--space-2);
+        padding-right: var(--space-2);
+    }
+  .ask__tags {
+      gap: var(--space-2);
+  }
+
+}
 
 /* ===================================
    9. FAQ
@@ -1538,4 +1552,43 @@ a:hover, a:focus { color: var(--colour-primary-hover); } /* darker teal */
   .entry-content p  { font-size: 1rem; }
   .hero__title     { font-size: var(--fs-800); }
   h2 {font-size: var(--fs-700);}
+}
+
+/* ==============================================================
+   GLOW + BLOB ORBIT (drop-in patch)
+   ============================================================= */
+
+/* — Adjustable knobs — */
+:root { --orbit-radius: 260px; }      /* how wide the circle is           */
+                                      /* (bigger = wider loop, smaller = tighter) */
+
+/* --------------------------------------------------------------
+   Keyframes: classic “planet orbit” pattern
+   -------------------------------------------------------------- */
+@keyframes orbit-cw  {                       /* clockwise 360° */
+  from { transform: translate(-50%, -50%) rotate(   0deg) translateX(var(--orbit-radius)) rotate(   0deg); }
+  to   { transform: translate(-50%, -50%) rotate( 360deg) translateX(var(--orbit-radius)) rotate(-360deg); }
+}
+@keyframes orbit-ccw {                       /* counter-clockwise 360° */
+  from { transform: translate(-50%, -50%) rotate(    0deg) translateX(var(--orbit-radius)) rotate(    0deg); }
+  to   { transform: translate(-50%, -50%) rotate(-360deg)  translateX(var(--orbit-radius)) rotate( 360deg); }
+}
+
+/* --------------------------------------------------------------
+   Apply only when users ALLOW motion
+   -------------------------------------------------------------- */
+@media (prefers-reduced-motion: no-preference) {
+
+  /* HERO glow / blobs */
+  .hero.glow::before {
+    /* existing blur / background etc. remain untouched */
+    animation: orbit-cw 12s linear infinite;
+    will-change: transform;                       /* keeps it GPU-accelerated */
+  }
+
+  /* Glow panel */
+  .glow-panel::before {
+    animation: orbit-ccw 12s linear infinite;
+    will-change: transform;
+  }
 }
